@@ -1,9 +1,5 @@
-import { Text, View } from "react-native";
+import Tenants from "@/components/screens/tenants/tenants-page";
 
 export default function TenantsScreen() {
-  return (
-    <View>
-      <Text>Tenants Screen</Text>
-    </View>
-  );
+  return <Tenants />;
 }

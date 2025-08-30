@@ -16,8 +16,9 @@ const Colors = {
     600: "#737373",
     800: "#404040",
   },
-  textPrimary: main.primary,
+  textPrimary: "#304050",
   accentGradient: ["#FF0080", "#7928CA"],
+  surfaceGradient: ["#EAE6FA", "#F3E6FA"],
   white: "white",
   gray: "gray",
 } as const;

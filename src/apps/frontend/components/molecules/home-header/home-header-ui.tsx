@@ -2,12 +2,13 @@ import Colors from "@/constants/colors";
 import Sizes from "@/constants/sizes";
 import Entypo from "@expo/vector-icons/Entypo";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Image } from "expo-image";
 import SectionWrapper from "../../atoms/section-wrapper/section-wrapper-ui";
 
-export default function MainHeader() {
+export default function HomeHeader() {
   return (
-    <SectionWrapper backgroundColor={Colors.surface}>
+    <SectionWrapper>
       <View style={styles.container}>
         <View style={styles.leftContainer}>
           <Pressable style={styles.headerImgBtn}>
@@ -45,6 +46,8 @@ export default function MainHeader() {
 const styles = StyleSheet.create({
   leftContainer: {
     flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     gap: 8,
   },
   headerImgBtn: {
@@ -88,6 +91,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingTop: Sizes.padding,
+    paddingVertical: Sizes.padding,
   },
 });

@@ -25,7 +25,7 @@ export default function RootLayout() {
             <Stack
               screenOptions={{
                 contentStyle: {
-                  backgroundColor: Colors.neutral,
+                  backgroundColor: Colors.surface,
                 },
               }}
             >

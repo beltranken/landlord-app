@@ -1,9 +1,5 @@
-import { Text, View } from "react-native";
+import Properties from "@/components/screens/properties/properties-page";
 
 export default function PropertiesScreen() {
-  return (
-    <View>
-      <Text>Properties Screen</Text>
-    </View>
-  );
+  return <Properties />;
 }

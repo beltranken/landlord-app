@@ -1,6 +1,7 @@
 import TabButton, {
   Icon,
 } from "@/components/molecules/tab-button/tab-button-ui";
+import Colors from "@/constants/colors";
 import Sizes from "@/constants/sizes";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { Tabs } from "expo-router";
@@ -12,8 +13,8 @@ export default function PrivateLayout() {
       tabBar={(props) => <CustomTabBar {...props} />}
       screenOptions={{
         headerShown: false,
-        tabBarStyle: {
-          backgroundColor: "transparent",
+        sceneStyle: {
+          backgroundColor: Colors.surface,
         },
       }}
     >

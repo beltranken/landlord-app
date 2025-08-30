@@ -1,9 +1,5 @@
-import { Text, View } from "react-native";
+import Requests from "@/components/screens/requests/requests-page";
 
 export default function RequestsScreen() {
-  return (
-    <View>
-      <Text>Requests Screen</Text>
-    </View>
-  );
+  return <Requests />;
 }

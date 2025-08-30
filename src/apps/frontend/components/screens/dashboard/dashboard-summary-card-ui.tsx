@@ -38,7 +38,7 @@ export default function DashboardSummaryCard() {
   const carouselRef = useRef<ICarouselInstance | null>(null);
 
   const { width, padding } = useMemo(() => {
-    const width = Math.max(deviceWidth, Sizes.maxWidth);
+    const width = Math.min(deviceWidth, Sizes.maxWidth);
 
     return {
       width,
@@ -71,7 +71,6 @@ export default function DashboardSummaryCard() {
   const goPrev = () => {
     goToIndex(currentIndex - 1);
   };
-  x;
   const goNext = () => {
     goToIndex(currentIndex + 1);
   };
