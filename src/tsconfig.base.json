@@ -7,8 +7,10 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
+    "baseUrl": ".",
     "paths": {
-      "@shared/type": ["src/shared/db/type"]
+      "@shared/db": ["shared/db/index.ts"],
+      "@shared/db/*": ["shared/db/*"]
     }
   }
 }

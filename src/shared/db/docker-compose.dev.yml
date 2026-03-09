@@ -1,0 +1,19 @@
+# dev only
+
+version: "3.9"
+services:
+  postgres:
+    image: postgres:18
+    container_name: landlord-app-postgres
+    restart: always
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_DB: landlord-app
+      POSTGRES_USER: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+
+volumes:
+  postgres_data:

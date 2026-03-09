@@ -30,13 +30,21 @@ export default function MainWrapper<T extends { id: number }>({
       >
         <View
           style={{
-            maxWidth: Sizes.maxWidth,
             width: "100%",
             paddingHorizontal: Sizes.padding,
             paddingBottom: Sizes.padding,
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          <TextH2>{title}</TextH2>
+          <View
+            style={{
+              maxWidth: Sizes.maxWidth,
+              width: "100%",
+            }}
+          >
+            <TextH2>{title}</TextH2>
+          </View>
         </View>
 
         <View style={styles.contentTopCurv} />

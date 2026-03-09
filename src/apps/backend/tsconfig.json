@@ -1,0 +1,26 @@
+{
+  "extends": "fastify-tsconfig",
+  "compilerOptions": {
+    "rootDir": "../..",
+    "outDir": "dist",
+    "declarationMap": true,
+    "composite": true,
+    "baseUrl": "./",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "paths": {
+      "@backend/plugins": ["src/plugins/index.ts"],
+      "@backend/services/*": ["src/services/*"],
+      "@backend/utils/*": ["src/utils/*"],
+      "@backend/*": ["src/*"],
+      "@db/schema": ["../../shared/db/src/schema.ts"],
+      "@db/initDb": ["../../shared/db/src/initDb.ts"],
+      "@db/drizzle": ["../../shared/db/src/drizzle.ts"],
+      "@db/enums": ["../../shared/db/src/enums.ts"],
+      "@db/*": ["../../shared/db/src/*"],
+      "@validations": ["../../shared/types/src/validations/index.ts"],
+      "@validations/*": ["../../shared/types/src/validations/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "../../shared/**/src/**/*.ts"]
+}

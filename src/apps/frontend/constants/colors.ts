@@ -20,7 +20,7 @@ const Colors = {
   accentGradient: ["#FF0080", "#7928CA"],
   surfaceGradient: ["#EAE6FA", "#F3E6FA"],
   white: "white",
-  gray: "gray",
+  gray: "#EFE9E4",
 } as const;
 
 export default Colors;
