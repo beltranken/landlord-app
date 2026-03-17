@@ -1,7 +1,7 @@
-import { Pressable, StyleSheet } from "react-native";
-import AntDesign from "@expo/vector-icons/AntDesign";
 import Text from "@/components/atoms/text/text-ui";
-import Colors from "@/constants/colors";
+import Colors from "@/constants/colors-old";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import { Pressable, StyleSheet } from "react-native";
 
 export default function CalendarPicker() {
   const valueStr = "Sun, 11 may 25";

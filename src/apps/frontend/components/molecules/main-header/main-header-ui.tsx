@@ -1,4 +1,4 @@
-import Colors from "@/constants/colors";
+import Colors from "@/constants/colors-old";
 import Sizes from "@/constants/sizes";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Pressable, StyleSheet, View } from "react-native";

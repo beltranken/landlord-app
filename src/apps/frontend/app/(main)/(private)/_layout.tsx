@@ -1,7 +1,7 @@
 import TabButton, {
   Icon,
 } from "@/components/molecules/tab-button/tab-button-ui";
-import Colors from "@/constants/colors";
+import Colors from "@/constants/colors-old";
 import Sizes from "@/constants/sizes";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { Tabs } from "expo-router";

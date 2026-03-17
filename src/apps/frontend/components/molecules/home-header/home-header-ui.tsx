@@ -1,9 +1,9 @@
-import Colors from "@/constants/colors";
+import Colors from "@/constants/colors-old";
 import Sizes from "@/constants/sizes";
 import Entypo from "@expo/vector-icons/Entypo";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Image } from "expo-image";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import SectionWrapper from "../../atoms/section-wrapper/section-wrapper-ui";
 
 export default function HomeHeader() {

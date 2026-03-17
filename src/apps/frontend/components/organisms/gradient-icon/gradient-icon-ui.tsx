@@ -1,4 +1,4 @@
-import Colors from "@/constants/colors";
+import Colors from "@/constants/colors-old";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaskedView from "@react-native-masked-view/masked-view";
 import { LinearGradient } from "expo-linear-gradient";

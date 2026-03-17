@@ -3,14 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev:frontend": "pnpm --filter frontend run start",
-    "dev:backend": "pnpm --filter backend run start"
+    "dev:frontend": "pnpm --filter frontend run dev",
+    "dev:backend": "pnpm --filter backend run dev"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^24.3.0",
-    "typescript": "~5.8.3"
+    "typescript": "~5.9.2"
   }
 }

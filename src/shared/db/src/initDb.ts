@@ -1,14 +1,20 @@
+import { drizzle, NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
-import { drizzle } from "drizzle-orm/node-postgres";
-import dotenv from "dotenv";
-import * as schema from "./schema.js";
+import * as schema from "./schema";
 
-dotenv.config();
+export type Db = NodePgDatabase<typeof schema> & {
+  $client: Pool;
+};
 
-export const initDb = () => {
+export const initDb = (dbConnectionString?: string) => {
   const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
+    connectionString: dbConnectionString,
     ssl: false,
+    min: 1,
+  });
+
+  pool.on("error", (err) => {
+    console.error("Unexpected Postgres pool error", err);
   });
 
   const db = drizzle({

@@ -1,6 +1,6 @@
 import GradientBackground from "@/components/atoms/gradient-background/gradient-background-ui";
 import TextH2 from "@/components/atoms/text/text-h2-ui";
-import Colors from "@/constants/colors";
+import Colors from "@/constants/colors-old";
 import Sizes from "@/constants/sizes";
 import { PropsWithChildren, ReactElement } from "react";
 import { FlatList, ListRenderItem, StyleSheet, View } from "react-native";

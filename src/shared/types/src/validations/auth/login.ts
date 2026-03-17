@@ -1,12 +1,17 @@
 import { z } from "zod";
+import { baseResponseSchema } from "../reusable/base";
+import { authDataSchema } from "./auth";
 
-export const loginSchema = z.object({
-  email: z.string().email(),
+export const loginRequestSchema = z.object({
+  email: z.email(),
   password: z.string().min(6),
 });
 
-export type Login = z.infer<typeof loginSchema>;
+export type LoginRequest = z.infer<typeof loginRequestSchema>;
 
-export const loginResponseSchema = z.object({ token: z.string() });
+export const loginResponseSchema = baseResponseSchema.extend({
+  data: authDataSchema,
+});
 
 export type LoginResponse = z.infer<typeof loginResponseSchema>;
+export type LoginResponseData = z.infer<typeof authDataSchema>;

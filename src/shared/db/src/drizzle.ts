@@ -1,2 +1,2 @@
-export { drizzle } from "drizzle-orm/postgres-js";
 export * from "drizzle-orm";
+export { drizzle, NodePgDatabase } from "drizzle-orm/node-postgres";

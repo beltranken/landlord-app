@@ -3,14 +3,25 @@
   "compilerOptions": {
     "strict": true,
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/components/*": ["./components/*"],
+      "@/constants": ["./constants/index.ts"],
+      "@/constants/*": ["./constants/*"],
+      "@/providers/*": ["./providers/*"],
+      "@/api/*": ["./api/*"],
+      "@/validations": ["../../shared/types/src/validations/index"],
+      "@/validations/*": ["../../shared/types/src/validations/*"],
+      "@/enums": ["../../shared/types/src/enums.ts"],
+      "@/types": ["../../shared/db/src/types.ts"],
+      "@/*": ["./*"]
     }
   },
+  "exclude": ["node_modules", "dist", "build"],
   "include": [
-    "**/*.ts",
-    "**/*.tsx",
+    "./*.ts",
+    "./**/*.ts",
+    "./**/*.tsx",
+    "../../shared/types/src/**/*.ts",
+    "../../shared/db/src/types.ts",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
   ]

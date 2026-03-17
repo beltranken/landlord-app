@@ -1,9 +1,9 @@
+import Colors from "@/constants/colors-old";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { LinearGradient } from "expo-linear-gradient";
 import { ComponentProps } from "react";
 import { View } from "react-native";
 import MaskedView from "../masked-view/masked-view.web";
-import Colors from "@/constants/colors";
 
 export default function GradientIcon({
   name,

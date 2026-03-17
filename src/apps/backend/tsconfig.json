@@ -12,15 +12,25 @@
       "@backend/plugins": ["src/plugins/index.ts"],
       "@backend/services/*": ["src/services/*"],
       "@backend/utils/*": ["src/utils/*"],
+      "@backend/libs": ["src/libs"],
+      "@backend/libs/*": ["src/libs/*"],
       "@backend/*": ["src/*"],
       "@db/schema": ["../../shared/db/src/schema.ts"],
       "@db/initDb": ["../../shared/db/src/initDb.ts"],
       "@db/drizzle": ["../../shared/db/src/drizzle.ts"],
-      "@db/enums": ["../../shared/db/src/enums.ts"],
+      "@db/types": ["../../shared/db/src/types.ts"],
       "@db/*": ["../../shared/db/src/*"],
-      "@validations": ["../../shared/types/src/validations/index.ts"],
-      "@validations/*": ["../../shared/types/src/validations/*"]
+      "@enums": ["../../shared/types/src/enums.ts"],
+      "@types": ["../../shared/types/src/index.ts"],
+      "@types/*": ["../../shared/types/src/*"]
     }
   },
-  "include": ["src/**/*.ts", "../../shared/**/src/**/*.ts"]
+  "exclude": ["node_modules", "dist", "build"],
+  "include": [
+    "src/**/*.ts",
+    "jest.config.ts",
+    "../../shared/db/src/*.ts",
+    "../../shared/types/src/**/*.ts",
+    "../../shared/db/src/scripts/seedPropertyFeatureTypes.ts"
+  ]
 }

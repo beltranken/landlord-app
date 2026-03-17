@@ -1,17 +1,18 @@
-import initDb from "../../../../shared/db/src/initDb";
-import dotenv from "dotenv";
-import { FastifyPluginCallback } from "fastify";
+import initDb from "@db/initDb";
+import { FastifyPluginAsync } from "fastify";
+import fp from "fastify-plugin";
 
-dotenv.config();
-
-export const dbPlugin: FastifyPluginCallback = (fastify, _options, done) => {
-  const { db, pool } = initDb();
+const dbPluginImpl: FastifyPluginAsync = async (fastify, _options) => {
+  const { db, pool } = initDb(fastify.config.DATABASE_URL);
 
   fastify.decorate("db", db);
 
   fastify.addHook("onClose", async (_instance) => {
+    console.log("Closing database pool...");
     await pool.end();
   });
-
-  done();
 };
+
+export const dbPlugin = fp(dbPluginImpl, {
+  name: "db",
+});

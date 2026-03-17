@@ -1,4 +1,4 @@
-import Colors from "@/constants/colors";
+import Colors from "@/constants/colors-old";
 import { LinearGradient } from "expo-linear-gradient";
 import { PropsWithChildren } from "react";
 import { StyleProp, ViewStyle } from "react-native";

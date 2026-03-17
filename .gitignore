@@ -1,4 +1,5 @@
 .vscode
+openapi.json
 
 **/node_modules
 **/dist

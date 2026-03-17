@@ -1,6 +1,6 @@
 import Card from "@/components/atoms/card/card-ui";
 import TextH4 from "@/components/atoms/text/text-h4-ui";
-import Colors from "@/constants/colors";
+import Colors from "@/constants/colors-old";
 import Sizes from "@/constants/sizes";
 import baseStyles from "@/constants/styles";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -59,7 +59,7 @@ export default function DashboardSummaryCard() {
       const translateX = interpolate(value, [-1, 0, 1], [-width, 0, width]);
       return { transform: [{ translateX }], zIndex };
     },
-    [width]
+    [width],
   );
 
   const goToIndex = (next: number) => {

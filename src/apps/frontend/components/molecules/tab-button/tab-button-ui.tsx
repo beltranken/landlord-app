@@ -1,5 +1,5 @@
 import GradientIcon from "@/components/organisms/gradient-icon/gradient-icon-ui";
-import Colors from "@/constants/colors";
+import Colors from "@/constants/colors-old";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { TabTriggerSlotProps } from "expo-router/ui";
 import { ComponentProps, Ref } from "react";

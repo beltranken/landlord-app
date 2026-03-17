@@ -1,4 +1,4 @@
-import Colors from "@/constants/colors";
+import Colors from "@/constants/colors-old";
 import { StyleSheet, Text, TextProps } from "react-native";
 
 export default function TextH5({ style, ...props }: Readonly<TextProps>) {

@@ -1,28 +1,28 @@
 import {
-  pgTable,
+  boolean,
+  date,
+  foreignKey,
   integer,
+  pgEnum,
+  pgTable,
   text,
   timestamp,
-  varchar,
-  pgEnum,
-  boolean,
   uniqueIndex,
-  foreignKey,
-  date,
+  varchar,
 } from "drizzle-orm/pg-core";
 
 import {
-  UserStatus,
-  RentFrequency,
-  PropertyType,
-  PropertyStatus,
-  PropertyFeatureTypes,
   InvoiceReason,
-  PaymentStatus,
-  RentStatus,
   PaymentMode,
+  PaymentStatus,
+  PropertyFeatureTypes,
+  PropertyStatus,
+  PropertyType,
+  RentFrequency,
+  RentStatus,
   UserRole,
-} from "./enums.js";
+  UserStatus,
+} from "@enums";
 
 function enumToPgEnum<T extends Record<string, string>>(
   myEnum: T,
@@ -31,12 +31,12 @@ function enumToPgEnum<T extends Record<string, string>>(
 }
 
 const address = {
-  address1: varchar("street", { length: 100 }),
-  address2: varchar("street2", { length: 100 }),
-  city: varchar("city", { length: 100 }),
-  state: varchar("state", { length: 100 }),
+  address1: varchar("address1", { length: 255 }),
+  address2: varchar("address2", { length: 255 }),
+  city: varchar("city", { length: 255 }),
+  state: varchar("state", { length: 255 }),
   postalCode: varchar("postal_code", { length: 20 }),
-  country: varchar("country", { length: 100 }),
+  country: varchar("country", { length: 255 }),
   latitude: text("latitude"),
   longitude: text("longitude"),
 };
@@ -110,11 +110,11 @@ export const usersTable = pgTable("users", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
   email: varchar("email", { length: 255 }).notNull().unique(),
   passwordHash: text("password_hash").notNull(),
-  name: varchar("name", { length: 255 }).notNull(),
+  firstName: varchar("firstName", { length: 255 }).notNull(),
+  lastName: varchar("lastName", { length: 255 }),
   image: varchar("image", { length: 255 }),
   phone: varchar("phone", { length: 20 }),
   dateOfBirth: timestamp("date_of_birth"),
-  address: text("address"),
   status: userStatusEnum("status").default(UserStatus.INACTIVE).notNull(),
   ...address,
   ...timestamps,
