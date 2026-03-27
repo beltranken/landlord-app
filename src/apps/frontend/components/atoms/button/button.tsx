@@ -1,4 +1,4 @@
-import { Colors } from "@/constants";
+import { BaseStyles, Colors } from "@/constants";
 import {
   Pressable,
   PressableProps,
@@ -14,7 +14,7 @@ type ButtonProps = PressableProps & {
   textStyles?: TextProps["style"];
 };
 
-export function Button({
+function Button({
   containerStyle,
   textStyles,
   children,
@@ -61,8 +61,11 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     alignItems: "center",
+    ...BaseStyles.shadow,
   },
   text: {
     color: Colors.buttonText,
   },
 });
+
+export default Button;

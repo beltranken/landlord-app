@@ -1,4 +1,4 @@
-import { Button } from "@/components/atoms/button/button";
+import { Button } from "@/components/atoms/button";
 import { TextInput } from "@/components/atoms/text-input/text-input";
 import Text from "@/components/atoms/text/text-ui";
 import useSubmittedError from "@/hooks/useSubmittedError";
@@ -56,7 +56,7 @@ export default function ForgotPasswordScreen() {
 
         <View style={styles.loginContainer}>
           <Text>Remembered your password?</Text>
-          <Link href="/login">
+          <Link href="/signin">
             <Text style={styles.loginText}>Login</Text>
           </Link>
         </View>

@@ -1,13 +1,12 @@
-import { ScrollView, StyleSheet, View } from "react-native";
-import DashboardSummaryCard from "./dashboard-summary-card-ui";
-import HomeHeader from "@/components/molecules/home-header/home-header-ui";
 import Card from "@/components/atoms/card/card-ui";
 import TextH4 from "@/components/atoms/text/text-h4-ui";
-import GradientBackground from "@/components/atoms/gradient-background/gradient-background-ui";
+import HomeHeader from "@/components/molecules/home-header/home-header-ui";
+import { ScrollView, StyleSheet, View } from "react-native";
+import DashboardSummaryCard from "./dashboard-summary-card-ui";
 
 export default function Dashboard() {
   return (
-    <GradientBackground>
+    <View style={{ flex: 1 }}>
       <HomeHeader />
 
       <View style={{ flex: 1 }}>
@@ -49,7 +48,7 @@ export default function Dashboard() {
           <View style={{ height: 60 }}></View>
         </ScrollView>
       </View>
-    </GradientBackground>
+    </View>
   );
 }
 

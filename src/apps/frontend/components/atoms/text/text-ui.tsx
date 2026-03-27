@@ -7,6 +7,7 @@ export default function Text({ style, ...props }: Readonly<TextProps>) {
 
 const styles = StyleSheet.create({
   text: {
+    fontFamily: "Inter-Regular",
     fontSize: 14,
     color: Colors.text,
   },

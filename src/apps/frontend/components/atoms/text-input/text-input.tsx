@@ -1,148 +1,108 @@
-import { BaseStyles } from "@/constants";
-import { Ionicons } from "@expo/vector-icons";
-import React, { forwardRef, useEffect, useRef, useState } from "react";
+import { BaseStyles, Colors, Sizes } from "@/constants";
+import { EvilIcons } from "@expo/vector-icons";
+import React, { forwardRef, useState } from "react";
 import type { TextInput as RNTextInput } from "react-native";
 import {
-  Animated,
+  TextInputProps as RNTextInputProps,
   StyleSheet,
   Text,
   TextInput as TextInputBase,
-  TextInputProps,
   View,
 } from "react-native";
 
-type FloatingTextInputProps = TextInputProps & {
-  floatingPlaceholder?: string;
-  leftIconName?: React.ComponentProps<typeof Ionicons>["name"];
+export type TextInputProps = RNTextInputProps & {
+  label?: string;
+  leftIconName?: React.ComponentProps<typeof EvilIcons>["name"];
   errorText?: string;
 };
 
-export const TextInput = forwardRef<
-  RNTextInput,
-  Readonly<FloatingTextInputProps>
->((props, ref) => {
-  const {
-    floatingPlaceholder,
-    placeholder,
-    leftIconName,
-    errorText,
-    style,
-    onFocus,
-    onBlur,
-    value,
-    ...rest
-  } = props;
+export const TextInput = forwardRef<RNTextInput, Readonly<TextInputProps>>(
+  (props, ref) => {
+    const {
+      label,
+      placeholder,
+      leftIconName,
+      errorText,
+      style,
+      onFocus,
+      onBlur,
+      value,
+      ...rest
+    } = props;
 
-  const [isFocused, setIsFocused] = useState(false);
-  const animated = useRef(new Animated.Value(0)).current;
+    const [isFocused, setIsFocused] = useState(false);
 
-  const label = floatingPlaceholder ?? placeholder;
+    const handleFocus: TextInputProps["onFocus"] = (e) => {
+      setIsFocused(true);
+      onFocus?.(e);
+    };
 
-  useEffect(() => {
-    const shouldFloat = isFocused;
+    const handleBlur: TextInputProps["onBlur"] = (e) => {
+      setIsFocused(false);
+      onBlur?.(e);
+    };
 
-    Animated.timing(animated, {
-      toValue: shouldFloat ? 1 : 0,
-      duration: 150,
-      useNativeDriver: true,
-    }).start();
-  }, [animated, isFocused]);
+    return (
+      <View style={styles.wrapper}>
+        {label && <Text style={styles.label}>{label}</Text>}
 
-  const handleFocus: TextInputProps["onFocus"] = (e) => {
-    setIsFocused(true);
-    onFocus?.(e);
-  };
+        <View style={[styles.container]}>
+          {leftIconName && (
+            <EvilIcons
+              name={leftIconName}
+              size={20}
+              color="#000"
+              style={styles.leftIcon}
+            />
+          )}
 
-  const handleBlur: TextInputProps["onBlur"] = (e) => {
-    setIsFocused(false);
-    onBlur?.(e);
-  };
-
-  const labelTranslateY = animated.interpolate({
-    inputRange: [0, 1],
-    outputRange: [10, -20],
-  });
-
-  const labelScale = animated.interpolate({
-    inputRange: [0, 1],
-    outputRange: [1, 0.8],
-  });
-
-  return (
-    <View style={[styles.container]}>
-      {leftIconName && (
-        <Ionicons
-          name={leftIconName}
-          size={20}
-          color="#000"
-          style={styles.leftIcon}
-        />
-      )}
-      {label && (
-        <Animated.Text
-          style={[
-            styles.label,
-            {
-              left: leftIconName ? 36 : 8,
-              transform: [
-                { translateY: labelTranslateY },
-                { scale: labelScale },
-              ],
-              opacity: isFocused ? 1 : 0,
-              borderWidth: isFocused ? 1 : 0,
-              borderColor: isFocused ? "#ddd" : "transparent",
-              backgroundColor: isFocused ? "#ffffff" : "transparent",
-              paddingHorizontal: 8,
-              borderRadius: 4,
-            },
-          ]}
-        >
-          {label}
-        </Animated.Text>
-      )}
-
-      <TextInputBase
-        ref={ref}
-        {...rest}
-        value={value}
-        style={[
-          styles.input,
-          leftIconName && styles.inputWithIcon,
-          BaseStyles.shadow,
-          style,
-          errorText && styles.inputError,
-        ]}
-        placeholder={isFocused ? undefined : placeholder}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-      />
-      {errorText ? <Text style={styles.errorText}>{errorText}</Text> : null}
-    </View>
-  );
-});
+          <TextInputBase
+            ref={ref}
+            {...rest}
+            value={value}
+            style={[
+              styles.input,
+              leftIconName && styles.inputWithIcon,
+              BaseStyles.shadow,
+              style,
+              errorText && styles.inputError,
+            ]}
+            placeholder={isFocused ? undefined : placeholder}
+            placeholderTextColor="#717878"
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+          />
+          {errorText ? <Text style={styles.errorText}>{errorText}</Text> : null}
+        </View>
+      </View>
+    );
+  },
+);
 
 const styles = StyleSheet.create({
+  wrapper: {
+    gap: Sizes.padding / 2,
+  },
   container: {
     position: "relative",
     justifyContent: "center",
   },
   label: {
-    position: "absolute",
-    color: "#888",
-    backgroundColor: "transparent",
+    fontFamily: "Inter-Medium",
+    color: Colors.text,
+    textTransform: "uppercase",
   },
   input: {
-    backgroundColor: "#ffffff",
-    borderWidth: 1,
-    borderColor: "#ddd",
+    backgroundColor: "#E1E3E4",
+    borderWidth: 2,
+    borderColor: "#E1E3E4",
     borderRadius: 8,
     outlineWidth: 2,
     outlineColor: "black",
-    paddingHorizontal: 8,
-    paddingVertical: 10,
+    padding: Sizes.padding,
   },
   inputError: {
-    borderColor: "#d32f2f",
+    borderColor: Colors.textError,
   },
   inputWithIcon: {
     paddingLeft: 36,
@@ -156,6 +116,6 @@ const styles = StyleSheet.create({
   errorText: {
     marginTop: 4,
     fontSize: 12,
-    color: "#d32f2f",
+    color: Colors.textError,
   },
 });

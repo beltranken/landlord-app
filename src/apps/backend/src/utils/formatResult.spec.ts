@@ -16,7 +16,7 @@ describe("formatResult", () => {
 
     expect(typedResult.success).toBe(true);
     expect(typedResult.data).toEqual(data);
-    expect(typedResult.error).toBeUndefined();
+    expect(typedResult.message).toBeUndefined();
   });
 
   it("returns an error result when error is provided", () => {
@@ -27,6 +27,6 @@ describe("formatResult", () => {
 
     expect(result.success).toBe(false);
     expect(result.data).toEqual(data);
-    expect(result.error).toBe(errorMessage);
+    expect(result.message).toBe(errorMessage);
   });
 });

@@ -13,7 +13,9 @@
     "rootDir": "..",
     "isolatedModules": true,
     "paths": {
-      "@enums": ["../types/src/enums"]
+      "@enums": ["../types/src/enums"],
+      "@types": ["../types/src/index"],
+      "@types/*": ["../types/src/*"]
     }
   },
   "exclude": ["node_modules", "dist", "build"],

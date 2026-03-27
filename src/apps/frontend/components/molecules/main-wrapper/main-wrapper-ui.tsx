@@ -1,15 +1,25 @@
-import GradientBackground from "@/components/atoms/gradient-background/gradient-background-ui";
-import TextH2 from "@/components/atoms/text/text-h2-ui";
-import Colors from "@/constants/colors-old";
+import { Button } from "@/components/atoms/button";
+import Text from "@/components/atoms/text/text-ui";
+import { Colors } from "@/constants";
 import Sizes from "@/constants/sizes";
+import { Ionicons } from "@expo/vector-icons";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { FlashList, FlashListProps, ListRenderItem } from "@shopify/flash-list";
 import { PropsWithChildren, ReactElement } from "react";
-import { FlatList, ListRenderItem, StyleSheet, View } from "react-native";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
+import ListCard from "../list-card/list-card";
+import SearchInput from "../search-input/search-input";
 
 interface MainWrapperProps<T> extends PropsWithChildren {
-  StickyHeader: ReactElement;
+  StickyHeader?: ReactElement;
   title?: string;
   data: T[];
   renderItem: ListRenderItem<T>;
+  isFetching?: boolean;
+  hasMore?: boolean;
+  loadMore?: FlashListProps<T>["onEndReached"];
+  addButtonText?: string;
+  addButtonPressed?: () => void;
 }
 
 export default function MainWrapper<T extends { id: number }>({
@@ -18,84 +28,185 @@ export default function MainWrapper<T extends { id: number }>({
   title,
   children,
   StickyHeader,
+  isFetching,
+  hasMore,
+  loadMore,
+  addButtonText,
+  addButtonPressed,
 }: Readonly<MainWrapperProps<T>>) {
-  return (
-    <GradientBackground>
-      {StickyHeader}
-      <View
-        style={{
-          flex: 1,
-          alignItems: "center",
-        }}
-      >
-        <View
-          style={{
-            width: "100%",
-            paddingHorizontal: Sizes.padding,
-            paddingBottom: Sizes.padding,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <View
+  const ListHeaderComponent = (
+    <View style={styles.wrapper}>
+      <View style={styles.headerContainer}>{/** TODO: text */}</View>
+    </View>
+  );
+
+  const SearchComponent = (
+    <View style={styles.listItemWrapper}>
+      <View style={styles.configContainer}>
+        <SearchInput placeholder="Search property by name or tenant" />
+
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+          <Button
+            containerStyle={{
+              width: "auto",
+            }}
             style={{
-              maxWidth: Sizes.maxWidth,
-              width: "100%",
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 8,
+              backgroundColor: Colors.buttonSecondary,
             }}
           >
-            <TextH2>{title}</TextH2>
-          </View>
-        </View>
+            <MaterialIcons name="tune" size={24} color={Colors.text} />
 
-        <View style={styles.contentTopCurv} />
-        <View
-          style={{
-            flex: 1,
-            width: "100%",
-            maxWidth: Sizes.maxWidth,
-            backgroundColor: "white",
-          }}
-        >
-          <FlatList
-            style={{ width: "100%" }}
-            contentContainerStyle={styles.container}
-            ListFooterComponent={<View style={{ height: 150 }}></View>}
-            ItemSeparatorComponent={() => (
-              <View
-                style={{
-                  height: 2,
-                  backgroundColor: Colors.gray,
-                  marginTop: Sizes.padding,
-                  borderRadius: 100,
-                  overflow: "hidden",
-                }}
-              ></View>
-            )}
-            data={data}
-            renderItem={renderItem}
-          >
-            {children}
-          </FlatList>
+            <Text
+              style={{
+                color: Colors.text,
+                fontFamily: "Inter-Medium",
+                fontSize: 16,
+              }}
+            >
+              Filter
+            </Text>
+          </Button>
         </View>
       </View>
-    </GradientBackground>
+    </View>
+  );
+
+  const ListFooterComponent = (
+    <View style={styles.wrapper}>
+      <View style={styles.footerContainer}>
+        {hasMore && isFetching && (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator />
+          </View>
+        )}
+      </View>
+    </View>
+  );
+
+  const ItemSeparatorComponent = () => (
+    <View style={{ height: Sizes.padding }} />
+  );
+
+  const handleLoadMore = () => {
+    if (loadMore && !isFetching && hasMore) {
+      loadMore();
+    }
+  };
+
+  return (
+    <View style={styles.wrapper}>
+      <FlashList
+        style={styles.container}
+        contentContainerStyle={styles.scrollContainer}
+        ListFooterComponent={ListFooterComponent}
+        ListHeaderComponent={ListHeaderComponent}
+        stickyHeaderIndices={[0]}
+        data={[{ type: "header", element: SearchComponent }, ...data]}
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.5}
+        ItemSeparatorComponent={ItemSeparatorComponent}
+        renderItem={(param) => {
+          if ("type" in param.item && param.item.type === "header") {
+            return param.item.element;
+          } else {
+            return (
+              <View style={styles.listItemWrapper}>
+                <View style={styles.listItemContainer}>
+                  <ListCard>
+                    {renderItem(param as Parameters<ListRenderItem<T>>[0])}
+                  </ListCard>
+                </View>
+              </View>
+            );
+          }
+        }}
+      />
+
+      {addButtonPressed && (
+        <View style={styles.actionWrapper}>
+          <View style={styles.actionContainer}>
+            <Button
+              containerStyle={{ width: "auto" }}
+              onPress={addButtonPressed}
+            >
+              <View
+                style={{ flexDirection: "row", alignItems: "center", gap: 8 }}
+              >
+                <Ionicons name="add" size={20} color="white" />
+
+                <Text style={{ color: "white" }}>{addButtonText}</Text>
+              </View>
+            </Button>
+          </View>
+        </View>
+      )}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  wrapper: {
     flex: 1,
     width: "100%",
-    paddingHorizontal: Sizes.padding,
-    gap: Sizes.padding,
+    alignItems: "center",
   },
-  contentTopCurv: {
-    height: 24,
+  container: {
+    width: "100%",
+    gap: 0,
+  },
+  scrollContainer: {
+    width: "100%",
+    gap: 0,
+  },
+  headerContainer: {
+    width: "100%",
+    alignItems: "center",
+    maxWidth: Sizes.maxWidth,
+    gap: 40,
+    paddingTop: Sizes.padding,
+  },
+  listItemWrapper: {
+    width: "100%",
+    alignItems: "center",
+    paddingHorizontal: Sizes.padding,
+  },
+  listItemContainer: {
     width: "100%",
     maxWidth: Sizes.maxWidth,
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    backgroundColor: "white",
   },
-  content: {},
+  configContainer: {
+    width: "100%",
+    gap: Sizes.padding,
+    maxWidth: Sizes.maxWidth,
+    paddingBottom: Sizes.padding,
+    backgroundColor: Colors.background,
+  },
+  footerContainer: {
+    width: "100%",
+    alignItems: "center",
+    maxWidth: Sizes.maxWidth,
+    minHeight: 250,
+  },
+  loadingContainer: {
+    alignItems: "center",
+    width: "100%",
+    paddingVertical: Sizes.padding,
+  },
+  actionWrapper: {
+    position: "absolute",
+    bottom: 100,
+    left: 0,
+    right: 0,
+    paddingHorizontal: Sizes.padding,
+    alignItems: "center",
+  },
+  actionContainer: {
+    width: "100%",
+    maxWidth: Sizes.maxWidth,
+    flexDirection: "row",
+    justifyContent: "flex-end",
+  },
 });

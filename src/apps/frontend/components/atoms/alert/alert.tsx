@@ -1,7 +1,7 @@
 import { BlurView } from "expo-blur";
 import React from "react";
 import { Modal, ModalProps, StyleSheet, View } from "react-native";
-import { Button } from "../button/button";
+import { Button } from "../button";
 import Text from "../text/text-ui";
 
 type AlertModalProps = ModalProps & {

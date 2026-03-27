@@ -1,4 +1,4 @@
-import { refresh as ApiRefresh } from "@/api";
+import { refresh as ApiRefresh, getCurrentUser } from "@/api";
 import Loading from "@/components/atoms/loading/loading";
 import { User } from "@/types";
 import {
@@ -26,10 +26,6 @@ interface IAuthContext {
   setAuthData: (data?: AuthData) => void;
   user?: User;
   isInitialized: boolean;
-  /* signIn: (prop: LoginRequest) => Promise<void>;
-  signOut: () => Promise<void>;
-  refresh: () => Promise<void>; 
-  exchange: (token: string) => Promise<void>;*/
 }
 
 const AuthContext = createContext<IAuthContext | undefined>(undefined);
@@ -51,52 +47,16 @@ export default function AuthProvider({
   const [user, setUser] = useState<User>();
   const [authData, setAuthData] = useState<AuthData>();
 
-  /* const signIn = useCallback(
-    async (body: LoginRequest) => {
-      setIsLoading(true);
-      try {
-        const { data: responseData, error, config } = await ApiSignIn({ body });
+  useEffect(() => {
+    if (!authData) return;
 
-        if (error) {
-          console.error("Path: ", config?.baseURL);
-          throw error;
-        }
+    const fetchUser = async () => {
+      const { data } = await getCurrentUser();
+      setUser(data?.data);
+    };
 
-        if (responseData === undefined) {
-          throw new Error("AuthData is undefined");
-        }
-
-        const { data } = responseData;
-
-        setAuthData({ ...data, refreshToken: "" });
-
-        await setMobileToken(data.refreshToken);
-
-        loginSignal(data);
-      } catch (e) {
-        console.error(e);
-        throw e;
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [setAuthData, setIsLoading],
-  );
-
-  const signOut = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      await ApiSignOut();
-      logoutSignal();
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setAuthData(undefined);
-      await removeToken("accessToken");
-      await setMobileToken(undefined);
-      setIsLoading(false);
-    }
-  }, [setIsLoading, setAuthData]); */
+    fetchUser();
+  }, [authData]);
 
   const refresh = useCallback(async () => {
     const refreshToken = await getToken("refreshToken");
@@ -108,8 +68,10 @@ export default function AuthProvider({
 
     if (!data) {
       removeToken("accessToken");
+      setAuthData(undefined);
       await setMobileToken(undefined);
     } else {
+      setAuthData({ ...data, refreshToken: "" });
       setToken("accessToken", data.token);
       await setMobileToken(data.refreshToken);
     }

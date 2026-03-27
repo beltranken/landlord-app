@@ -35,7 +35,9 @@
       [
         "expo-asset",
         {
-          "asset": ["./assets"]
+          "asset": [
+            "./assets"
+          ]
         }
       ],
       "expo-router",
@@ -52,7 +54,8 @@
         }
       ],
       "expo-sqlite",
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true,

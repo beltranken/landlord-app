@@ -1,6 +1,6 @@
 import { signUp } from "@/api/sdk.gen";
 import AlertModal from "@/components/atoms/alert/alert";
-import { Button } from "@/components/atoms/button/button";
+import { Button } from "@/components/atoms/button";
 import Loading from "@/components/atoms/loading/loading";
 import { PasswordInput } from "@/components/atoms/password-input/password-input";
 import { TextInput } from "@/components/atoms/text-input/text-input";

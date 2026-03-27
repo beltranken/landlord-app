@@ -1,78 +1,73 @@
+import { getProperties } from "@/api/sdk.gen";
 import Text from "@/components/atoms/text/text-ui";
-import MainHeader from "@/components/molecules/main-header/main-header-ui";
+import ImageView from "@/components/molecules/image-view/image-view";
 import MainWrapper from "@/components/molecules/main-wrapper/main-wrapper-ui";
 import PropertyStatusUI from "@/components/molecules/property-status/property-status-ui";
-import type { PropertyWithRelations } from "@shared/db";
-import { Image } from "expo-image";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { Pressable, View } from "react-native";
-
-function mockProperty(
-  partial: Partial<PropertyWithRelations>
-): PropertyWithRelations {
-  const now = new Date();
-  return {
-    id: 0,
-    name: "Unnamed",
-    description: null,
-    addressLine1: null,
-    addressLine2: null,
-    city: "Valenzuela",
-    state: "NCR",
-    postalCode: null,
-    country: "PH",
-    typeId: 1,
-    type: {
-      id: 1,
-      name: "Apartment",
-      createdAt: now,
-      description: "A residential unit in a building.",
-    },
-    ownerId: 1,
-    createdAt: now,
-    updatedAt: now,
-    ...partial,
-  } as PropertyWithRelations;
-}
 
 export default function PropertiesPage() {
   const router = useRouter();
 
-  const data: PropertyWithRelations[] = [
-    mockProperty({
-      id: 1,
-      name: "Greenwood Apartments - Unit 2B",
-      status: "occupied",
-    }),
-    mockProperty({ id: 2, name: "Test 2", status: "vacant" }),
-    mockProperty({ id: 3, name: "Test 3", status: "occupied" }),
-    mockProperty({ id: 4, name: "Test 4", status: "vacant" }),
-  ];
+  const { data, isFetching, fetchNextPage, hasNextPage } = useInfiniteQuery({
+    queryKey: ["properties"],
+    queryFn: async ({ pageParam = 1 }) => {
+      const response = await getProperties({
+        query: { page: pageParam },
+      });
+
+      if (!response.data || response.error) {
+        throw new Error(
+          response.error?.message ?? "Failed to fetch properties",
+        );
+      }
+
+      return response.data;
+    },
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) =>
+      lastPage.hasMore ? lastPage.page + 1 : undefined,
+  });
+
+  const properties = data?.pages.flatMap((page) => page.data) ?? [];
+
+  const handleOnAdd = () => {
+    router.push("/properties/add");
+  };
 
   return (
     <MainWrapper
-      title="Properties"
-      StickyHeader={<MainHeader />}
-      data={data}
+      addButtonPressed={handleOnAdd}
+      addButtonText="Add Property"
+      data={properties}
+      hasMore={!!hasNextPage}
+      isFetching={isFetching}
+      loadMore={fetchNextPage}
       renderItem={({ index, item }) => (
         <Pressable
+          key={index}
           style={{ flexDirection: "row", justifyContent: "space-between" }}
           onPress={() => {
             router.push(`/properties/${item.id}`);
           }}
         >
-          <View style={{ flex: 1, flexDirection: "row", gap: 8 }}>
-            <Image
-              source={{ uri: `https://picsum.photos/200?random=${index + 1}` }}
-              style={{ width: 100, height: 100, borderRadius: 8 }}
-            />
+          <View style={{ flex: 1, gap: 8 }}>
+            <View style={{ width: "100%", height: 256 }}>
+              <ImageView
+                source={{
+                  uri: `https://picsum.photos/200?random=${index + 1}`,
+                }}
+              />
+            </View>
+
             <View style={{ justifyContent: "space-between" }}>
               <View>
                 <Text style={{ fontWeight: "500" }}>{item.name}</Text>
                 <Text>{item.city}</Text>
               </View>
 
-              <PropertyStatusUI status={item.status} />
+              <PropertyStatusUI status={item.propertyStatus} />
             </View>
           </View>
           <View />

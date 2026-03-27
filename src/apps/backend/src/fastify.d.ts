@@ -36,3 +36,23 @@ declare module "fastify" {
     refreshJwtSign: FastifyReply["jwtSign"];
   }
 }
+
+declare module "@fastify/jwt" {
+  interface FastifyJWT {
+    payload: {
+      userId: number;
+      organizationId: number;
+    };
+    user: {
+      userId: number;
+      organizationId: number;
+    };
+  }
+
+  interface FastifyJWTNamespace {
+    refresh: {
+      payload: { userId: number };
+      user: { userId: number };
+    };
+  }
+}

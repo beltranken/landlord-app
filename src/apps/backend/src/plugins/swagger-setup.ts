@@ -5,12 +5,17 @@ import fp from "fastify-plugin";
 import {
   jsonSchemaTransform,
   jsonSchemaTransformObject,
+  serializerCompiler,
+  validatorCompiler,
 } from "fastify-type-provider-zod";
 
 const swaggerSetupPluginImpl: FastifyPluginAsync = async (
   fastify,
   _options,
 ) => {
+  fastify.setValidatorCompiler(validatorCompiler);
+  fastify.setSerializerCompiler(serializerCompiler);
+
   await fastify.register(swagger, {
     openapi: {
       info: {

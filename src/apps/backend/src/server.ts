@@ -4,11 +4,9 @@ import cookie from "@fastify/cookie";
 import cors from "@fastify/cors";
 import env from "@fastify/env";
 import Fastify from "fastify";
-import {
-  serializerCompiler,
-  validatorCompiler,
-} from "fastify-type-provider-zod";
 import { authPlugin } from "./features";
+import { propertiesPlugin } from "./features/properties/plugin";
+import { usersPlugin } from "./features/users";
 import { dbPlugin, errorHandlerPlugin } from "./plugins";
 import { authSetupPlugin } from "./plugins/auth-stepup";
 import { swaggerSetupPlugin } from "./plugins/swagger-setup";
@@ -82,9 +80,6 @@ export const createServer = async () => {
     loggerInstance: logger,
   });
 
-  fastify.setValidatorCompiler(validatorCompiler);
-  fastify.setSerializerCompiler(serializerCompiler);
-
   fastify.get("/ping", (_request, reply) => {
     reply.send({ message: "pong" });
   });
@@ -122,6 +117,8 @@ export const createServer = async () => {
 
   // routes
   await fastify.register(authPlugin, { prefix: "/api/auth" });
+  await fastify.register(usersPlugin, { prefix: "/api/users" });
+  await fastify.register(propertiesPlugin, { prefix: "/api/properties" });
 
   await fastify.ready();
 

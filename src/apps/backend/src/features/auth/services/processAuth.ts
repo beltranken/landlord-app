@@ -5,12 +5,13 @@ export async function processAccessAuth(
   fastify: FastifyInstance,
   reply: FastifyReply,
   userId: number,
+  organizationId: number,
 ) {
   const jwtAccessExpiryMs = ms(
     (fastify.config.JWT_ACCESS_EXPIRY ?? "1h") as StringValue,
   );
   const token = await reply.jwtSign(
-    { userId },
+    { userId, organizationId },
     {
       expiresIn: jwtAccessExpiryMs / 1000,
     },
@@ -56,7 +57,7 @@ export async function processAuth({
   reply: FastifyReply;
 }>) {
   return await Promise.all([
-    processAccessAuth(fastify, reply, userId),
+    processAccessAuth(fastify, reply, userId, organizationId),
     processRefreshAuth(fastify, reply, userId, organizationId),
   ]).then(([accessAuth, refreshAuth]) => ({
     ...accessAuth,
