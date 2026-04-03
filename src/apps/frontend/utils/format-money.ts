@@ -5,34 +5,42 @@ export interface FormatMoneyOptions {
   currency?: string;
   showCurrency?: boolean;
   fallback?: string;
+  decimalPlaces?: {
+    min?: number;
+    max?: number;
+  };
 }
 
 export function formatMoney(
   value: number | string | null | undefined,
   {
     locale = "en-US",
-    currency = "USD",
+    currency = "PHP",
     showCurrency = true,
     fallback,
-  }: FormatMoneyOptions = {}
+    decimalPlaces = { min: 2, max: 2 },
+  }: FormatMoneyOptions = {},
 ): string {
-  const num = typeof value === "string" ? Number(value) : value ?? 0;
+  const { min = 0, max = 0 } = decimalPlaces;
+
+  const num = typeof value === "string" ? Number(value) : (value ?? 0);
   if (!isFinite(num)) {
-    return fallback ?? (showCurrency ? CURRENCY_SIGN + "0.00" : "0.00");
+    const zeroStr = "0" + (min > 0 ? "." + "0".repeat(min) : "");
+
+    return fallback ?? (showCurrency ? CURRENCY_SIGN + zeroStr : zeroStr);
   }
 
   // Use Intl for proper grouping & symbol.
   const formatter = new Intl.NumberFormat(locale, {
     style: showCurrency ? "currency" : "decimal",
     currency,
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    minimumFractionDigits: min,
+    maximumFractionDigits: max,
   });
 
-  if (!showCurrency) {
-    return formatter.format(num);
-  }
-  return formatter.format(num);
+  const formatted = formatter.format(num);
+
+  return formatted;
 }
 
 export const money = formatMoney;

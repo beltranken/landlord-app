@@ -11,10 +11,12 @@ type GetPropertiesRoute = {
 
 export function getPropertiesRoute(fastify: FastifyInstance) {
   return async (
-    _req: FastifyRequest<GetPropertiesRoute>,
+    req: FastifyRequest<GetPropertiesRoute>,
     reply: FastifyReply<GetPropertiesRoute>,
   ) => {
-    const { properties, total, page, pageSize } = await getProperties(fastify);
+    const { properties, total, page, pageSize } = await getProperties(fastify, {
+      organizationId: req.user.organizationId,
+    });
     reply
       .status(200)
       .send(formatResultWithPaging(properties, total, page, pageSize));

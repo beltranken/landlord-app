@@ -1,4 +1,4 @@
-import Colors from "@/constants/colors-old";
+import { Colors } from "@/constants";
 import { StyleSheet, Text, TextProps } from "react-native";
 
 export default function TextH5({ style, ...props }: Readonly<TextProps>) {
@@ -8,7 +8,7 @@ export default function TextH5({ style, ...props }: Readonly<TextProps>) {
 const styles = StyleSheet.create({
   text: {
     fontSize: 16,
-    fontWeight: "600",
-    color: Colors.textPrimary,
+    fontFamily: "Inter-SemiBold",
+    color: Colors.textTitle,
   },
 });

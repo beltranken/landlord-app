@@ -14,12 +14,15 @@ const palette = {
 const white = "#ffffff" as const;
 
 export const Colors = {
-  background: palette.neutral,
+  ...palette,
+
+  background: "#F2F4F5",
   invertedBackground: palette.primary,
   surface: white,
 
   white,
 
+  textTitle: "#001819",
   text: "#414848",
   textError: "#BA1A1A",
 
@@ -29,4 +32,7 @@ export const Colors = {
   buttonSecondary: "#F2F4F5",
 
   highlight: palette.accent,
+
+  inputBackground: "#E1E3E4",
+  inputBorder: "#D0D3D4",
 } as const;

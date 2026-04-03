@@ -1,7 +1,13 @@
-import { PropertyStatus, PropertyType, RentFrequency } from "@enums";
 import "dotenv/config";
 import { initDb } from "../initDb";
-import { organizationsTable, propertiesTable, usersTable } from "../schema";
+import {
+  organizationsTable,
+  propertiesTable,
+  propertyFeaturesTable,
+  propertyFeatureTypesTable,
+  usersTable,
+} from "../schema";
+import { PropertyStatus, PropertyType, RentFrequency } from "../types/enums";
 
 const seedProperties = async () => {
   const { db, pool } = initDb();
@@ -90,9 +96,77 @@ const seedProperties = async () => {
       },
     ];
 
-    await db.insert(propertiesTable).values(properties);
+    const insertedProperties = await db
+      .insert(propertiesTable)
+      .values(properties)
+      .returning({ id: propertiesTable.id, name: propertiesTable.name });
 
-    console.log(`Seeded ${properties.length} properties.`);
+    const featureTypes = await db
+      .select({
+        id: propertyFeatureTypesTable.id,
+        name: propertyFeatureTypesTable.name,
+      })
+      .from(propertyFeatureTypesTable);
+
+    const getFeatureTypeId = (featureName: string) => {
+      const featureType = featureTypes.find((ft) => ft.name === featureName);
+
+      if (!featureType) {
+        throw new Error(
+          `Feature type "${featureName}" not found. Please seed property feature types before seeding properties.`,
+        );
+      }
+
+      return featureType.id;
+    };
+
+    const propertyFeatures = insertedProperties.flatMap((property) => {
+      const featuresForProperty: { featureName: string; value: string }[] = [];
+
+      switch (property.name) {
+        case "Downtown Apartment 101":
+          featuresForProperty.push(
+            { featureName: "Bedroom", value: "2" },
+            { featureName: "Bathroom", value: "1" },
+            { featureName: "Parking spot", value: "1" },
+          );
+          break;
+        case "Suburban House":
+          featuresForProperty.push(
+            { featureName: "Bedroom", value: "3" },
+            { featureName: "Bathroom", value: "2" },
+            { featureName: "Parking spot", value: "2" },
+          );
+          break;
+        case "Room 12B":
+          featuresForProperty.push(
+            { featureName: "Bedroom", value: "1" },
+            { featureName: "Bathroom", value: "1" },
+          );
+          break;
+        default:
+          break;
+      }
+
+      return featuresForProperty.map(({ featureName, value }) => ({
+        propertyId: property.id,
+        propertyFeatureTypeId: getFeatureTypeId(featureName),
+        name: featureName,
+        value,
+        createdBy: user.id,
+        updatedBy: user.id,
+      }));
+    });
+
+    if (propertyFeatures.length > 0) {
+      await db.insert(propertyFeaturesTable).values(propertyFeatures);
+    }
+
+    console.log(
+      `Seeded ${properties.length} properties and ${propertyFeatures.length} property features.`,
+    );
+
+    process.exit(0);
   } finally {
     await pool.end();
   }

@@ -11,6 +11,7 @@ import {
   Inter_400Regular,
   Inter_500Medium,
   Inter_600SemiBold,
+  Inter_700Bold,
   Inter_800ExtraBold,
   Inter_900Black,
   useFonts,
@@ -19,6 +20,7 @@ import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 
 client.setConfig({
   baseURL: `${process.env.EXPO_PUBLIC_API_URL}`,
@@ -34,6 +36,7 @@ export default function RootLayout() {
     "Inter-Regular": Inter_400Regular,
     "Inter-Medium": Inter_500Medium,
     "Inter-SemiBold": Inter_600SemiBold,
+    "Inter-Bold": Inter_700Bold,
     "Inter-ExtraBold": Inter_800ExtraBold,
     "Inter-Black": Inter_900Black,
   });
@@ -48,27 +51,33 @@ export default function RootLayout() {
   }
 
   return (
-    <SafeAreaProvider>
-      <SafeAreaView style={{ flex: 1, height: 570 }}>
-        <GestureHandlerRootView style={{ flex: 1, height: 570 }}>
-          <QueryClientProvider>
-            <AuthProvider>
-              <Stack
-                screenOptions={{
-                  headerShown: false,
-                  contentStyle: {
-                    backgroundColor: Colors.surface,
-                  },
-                }}
-              >
-                <Stack.Screen name="(main)" options={{ headerShown: false }} />
-                <Stack.Screen name="+not-found" />
-              </Stack>
-            </AuthProvider>
-          </QueryClientProvider>
-        </GestureHandlerRootView>
-        <StatusBar style="auto" />
-      </SafeAreaView>
-    </SafeAreaProvider>
+    <>
+      <SafeAreaProvider>
+        <SafeAreaView style={{ flex: 1, height: 570 }}>
+          <GestureHandlerRootView style={{ flex: 1, height: 570 }}>
+            <QueryClientProvider>
+              <AuthProvider>
+                <Stack
+                  screenOptions={{
+                    headerShown: false,
+                    contentStyle: {
+                      backgroundColor: Colors.surface,
+                    },
+                  }}
+                >
+                  <Stack.Screen
+                    name="(main)"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen name="+not-found" />
+                </Stack>
+              </AuthProvider>
+            </QueryClientProvider>
+          </GestureHandlerRootView>
+          <StatusBar style="auto" />
+        </SafeAreaView>
+      </SafeAreaProvider>
+      <Toast />
+    </>
   );
 }

@@ -13,7 +13,6 @@
     "rootDir": "..",
     "isolatedModules": true,
     "paths": {
-      "@enums": ["../types/src/enums"],
       "@types": ["../types/src/index"],
       "@types/*": ["../types/src/*"]
     }

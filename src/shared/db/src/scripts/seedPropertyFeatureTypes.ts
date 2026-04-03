@@ -1,36 +1,32 @@
-import { PropertyFeatureTypes } from "@enums";
 import "dotenv/config";
 import { initDb } from "../initDb";
 import { propertyFeatureTypesTable } from "../schema";
+import { PropertyFeatureTypes } from "../types/enums";
 
 const seedPropertyFeatureTypes = async () => {
   const { db, pool } = initDb();
 
   const featureTypes = [
     {
-      name: "Bedrooms",
+      name: "Bedroom",
       type: PropertyFeatureTypes.NUMBER,
       options: null,
     },
     {
-      name: "Bathrooms",
+      name: "Bathroom",
       type: PropertyFeatureTypes.NUMBER,
       options: null,
     },
     {
-      name: "Parking spots",
+      name: "Parking spot",
       type: PropertyFeatureTypes.NUMBER,
       options: null,
     },
     {
-      name: "Floor area (sqft)",
+      name: "Floor area",
       type: PropertyFeatureTypes.NUMBER,
       options: null,
-    },
-    {
-      name: "Balcony",
-      type: PropertyFeatureTypes.BOOLEAN,
-      options: null,
+      unit: "sqmt",
     },
     {
       name: "Garden",

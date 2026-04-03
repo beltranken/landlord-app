@@ -1,14 +1,15 @@
 import { drizzle, NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
+import { relations } from "./relations";
 import * as schema from "./schema";
 
-export type Db = NodePgDatabase<typeof schema> & {
+export type Db = NodePgDatabase<typeof schema, typeof relations> & {
   $client: Pool;
 };
 
 export const initDb = (dbConnectionString?: string) => {
   const pool = new Pool({
-    connectionString: dbConnectionString,
+    connectionString: dbConnectionString ?? process.env.DATABASE_URL,
     ssl: false,
     min: 1,
   });
@@ -20,6 +21,7 @@ export const initDb = (dbConnectionString?: string) => {
   const db = drizzle({
     client: pool,
     schema,
+    relations,
   });
 
   return { db, pool };

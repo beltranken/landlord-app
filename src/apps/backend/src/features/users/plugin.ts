@@ -1,3 +1,4 @@
+import { authenticate } from "@backend/decorators";
 import { errorResponses } from "@backend/utils/errors";
 import { userResponseSchema } from "@db/types";
 import { FastifyPluginAsync } from "fastify";
@@ -7,9 +8,7 @@ import { getCurrentUserRoute } from "./routes";
 export const usersPlugin: FastifyPluginAsync = async (fastify, _options) => {
   const typedFastify = fastify.withTypeProvider<ZodTypeProvider>();
 
-  fastify.addHook("preHandler", async (request, reply) => {
-    await fastify.authenticate(request, reply);
-  });
+  fastify.addHook("preHandler", authenticate(fastify));
 
   typedFastify.get(
     "/me",

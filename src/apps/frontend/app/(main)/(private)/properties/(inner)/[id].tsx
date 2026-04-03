@@ -1,10 +1,5 @@
-import Text from "@/components/atoms/text/text-ui";
-import { View } from "react-native";
+import PropertyPage from "@/components/screens/properties/property-page";
 
 export default function SinglePropertyPage() {
-  return (
-    <View>
-      <Text>test</Text>
-    </View>
-  );
+  return <PropertyPage />;
 }

@@ -1,4 +1,4 @@
-import { BaseStyles, Colors } from "@/constants";
+import { BaseStyles, Colors, Sizes } from "@/constants";
 import {
   Pressable,
   PressableProps,
@@ -58,12 +58,13 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     backgroundColor: Colors.button,
-    padding: 10,
+    padding: Sizes.padding,
     borderRadius: 5,
     alignItems: "center",
     ...BaseStyles.shadow,
   },
   text: {
+    fontFamily: "Inter-Bold",
     color: Colors.buttonText,
   },
 });

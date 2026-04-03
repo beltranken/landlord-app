@@ -7,7 +7,7 @@ import {
 } from "fastify";
 import fp from "fastify-plugin";
 import { isHttpError } from "http-errors";
-import { ZodError } from "zod";
+import { ZodError } from "zod/v4";
 
 export const errorHandlerPluginImpl: FastifyPluginAsync = async (
   fastify: FastifyInstance,

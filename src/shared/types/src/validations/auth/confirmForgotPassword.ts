@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "zod/v4";
 import { passwordSchema } from "../reusable";
 
 export const confirmForgotPasswordRequestSchema = passwordSchema.extend({

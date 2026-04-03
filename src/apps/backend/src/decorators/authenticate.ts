@@ -1,10 +1,7 @@
-import { FastifyRequest } from "fastify";
-import { handleJwtVerifyError } from "../features/auth/services/handleJwtVerifyError";
+import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 
-export async function authenticate(req: FastifyRequest) {
-  try {
-    await req.jwtVerify();
-  } catch (err) {
-    handleJwtVerifyError(err);
-  }
-}
+export const authenticate = (fastify: FastifyInstance) => {
+  return async function (request: FastifyRequest, reply: FastifyReply) {
+    await fastify.authenticate(request, reply);
+  };
+};

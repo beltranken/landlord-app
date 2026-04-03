@@ -1,11 +1,8 @@
 import { getProperties } from "@/api/sdk.gen";
-import Text from "@/components/atoms/text/text-ui";
-import ImageView from "@/components/molecules/image-view/image-view";
 import MainWrapper from "@/components/molecules/main-wrapper/main-wrapper-ui";
-import PropertyStatusUI from "@/components/molecules/property-status/property-status-ui";
+import PropertyCard from "@/components/molecules/property-card/property-card-ui";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
-import { Pressable, View } from "react-native";
 
 export default function PropertiesPage() {
   const router = useRouter();
@@ -45,33 +42,7 @@ export default function PropertiesPage() {
       isFetching={isFetching}
       loadMore={fetchNextPage}
       renderItem={({ index, item }) => (
-        <Pressable
-          key={index}
-          style={{ flexDirection: "row", justifyContent: "space-between" }}
-          onPress={() => {
-            router.push(`/properties/${item.id}`);
-          }}
-        >
-          <View style={{ flex: 1, gap: 8 }}>
-            <View style={{ width: "100%", height: 256 }}>
-              <ImageView
-                source={{
-                  uri: `https://picsum.photos/200?random=${index + 1}`,
-                }}
-              />
-            </View>
-
-            <View style={{ justifyContent: "space-between" }}>
-              <View>
-                <Text style={{ fontWeight: "500" }}>{item.name}</Text>
-                <Text>{item.city}</Text>
-              </View>
-
-              <PropertyStatusUI status={item.propertyStatus} />
-            </View>
-          </View>
-          <View />
-        </Pressable>
+        <PropertyCard item={item} index={index} />
       )}
     />
   );

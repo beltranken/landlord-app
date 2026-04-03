@@ -7,6 +7,8 @@ export async function processAccessAuth(
   userId: number,
   organizationId: number,
 ) {
+  // TODO: add permissions/roles here
+
   const jwtAccessExpiryMs = ms(
     (fastify.config.JWT_ACCESS_EXPIRY ?? "1h") as StringValue,
   );

@@ -9,51 +9,61 @@ export default function CustomTabBar({
   state,
   navigation,
 }: Readonly<BottomTabBarProps>) {
+  const focusedRoute = state.routes[state.index];
+
+  if (focusedRoute.name.includes("[id]") || focusedRoute.name.includes("add")) {
+    return null;
+  }
+
   return (
     <View style={styles.tabBarWrapper}>
       <View style={styles.tabBar}>
-        {state.routes.map((route, index) => {
-          const isFocused = state.index === index;
+        {state.routes
+          .filter((route) => {
+            return !route.name.includes("[id]") && !route.name.includes("add");
+          })
+          .map((route, index) => {
+            const isFocused = state.index === index;
 
-          let icon: Icon = "grid";
-          switch (route.name) {
-            case "dashboard/index":
-              icon = "grid";
-              break;
-            case "properties/index":
-              icon = "home";
-              break;
-            case "tenants/index":
-              icon = "person";
-              break;
-            case "payments/index":
-              icon = "cash";
-              break;
-            case "requests/index":
-              icon = "file-tray";
-          }
-
-          const onPress = () => {
-            const event = navigation.emit({
-              type: "tabPress",
-              target: route.key,
-              canPreventDefault: true,
-            });
-
-            if (!isFocused && !event.defaultPrevented) {
-              navigation.navigate(route.name, route.params);
+            let icon: Icon = "grid";
+            switch (route.name) {
+              case "dashboard/index":
+                icon = "grid";
+                break;
+              case "properties/index":
+                icon = "home";
+                break;
+              case "tenants/index":
+                icon = "person";
+                break;
+              case "payments/index":
+                icon = "cash";
+                break;
+              case "requests/index":
+                icon = "file-tray";
             }
-          };
 
-          return (
-            <TabButton
-              key={index}
-              icon={icon}
-              isFocused={isFocused}
-              onPress={onPress}
-            />
-          );
-        })}
+            const onPress = () => {
+              const event = navigation.emit({
+                type: "tabPress",
+                target: route.key,
+                canPreventDefault: true,
+              });
+
+              if (!isFocused && !event.defaultPrevented) {
+                navigation.navigate(route.name, route.params);
+              }
+            };
+
+            return (
+              <TabButton
+                key={index}
+                icon={icon}
+                isFocused={isFocused}
+                onPress={onPress}
+              />
+            );
+          })}
       </View>
     </View>
   );

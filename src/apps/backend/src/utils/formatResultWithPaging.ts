@@ -18,7 +18,7 @@ export default function formatResultWithPaging<T>(
   };
 }
 
-export type FormatResultWithPaging<T = unknown> = {
+export type FormatResultWithPaging<T> = {
   total: number;
   page: number;
   pageSize: number;

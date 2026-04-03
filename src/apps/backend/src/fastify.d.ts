@@ -1,3 +1,4 @@
+import { S3Client } from "@aws-sdk/client-s3";
 import { Db } from "@db/initDb";
 import { FastifyJwtNamespace } from "@fastify/jwt";
 import "fastify";
@@ -19,12 +20,18 @@ declare module "fastify" {
       JWT_REFRESH_EXPIRY: string;
       POSTMARK_SERVER_TOKEN: string;
       EMAIL_FROM: string;
+      AWS_REGION: string;
+      AWS_ACCESS_KEY_ID: string;
+      AWS_SECRET_ACCESS_KEY: string;
+      S3_ENDPOINT: string;
+      S3_BUCKET_NAME: string;
     };
     authenticate: (
       request: FastifyRequest,
       reply: FastifyReply,
     ) => Promise<void>;
     db: Db;
+    s3: S3Client;
   }
 
   interface FastifyRequest {

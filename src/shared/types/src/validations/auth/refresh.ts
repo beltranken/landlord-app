@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "zod/v4";
 import { LoginResponse, loginResponseSchema } from "./login";
 
 export const refreshRequestSchema = z.object({

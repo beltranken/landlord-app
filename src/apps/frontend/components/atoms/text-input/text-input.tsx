@@ -1,7 +1,11 @@
 import { BaseStyles, Colors, Sizes } from "@/constants";
 import { EvilIcons } from "@expo/vector-icons";
 import React, { forwardRef, useState } from "react";
-import type { TextInput as RNTextInput } from "react-native";
+import type {
+  TextInput as RNTextInput,
+  TextProps,
+  ViewProps,
+} from "react-native";
 import {
   TextInputProps as RNTextInputProps,
   StyleSheet,
@@ -12,6 +16,9 @@ import {
 
 export type TextInputProps = RNTextInputProps & {
   label?: string;
+  labelStyle?: TextProps["style"];
+  wrapperStyle?: ViewProps["style"];
+  containerStyle?: ViewProps["style"];
   leftIconName?: React.ComponentProps<typeof EvilIcons>["name"];
   errorText?: string;
 };
@@ -27,6 +34,9 @@ export const TextInput = forwardRef<RNTextInput, Readonly<TextInputProps>>(
       onFocus,
       onBlur,
       value,
+      labelStyle,
+      containerStyle,
+      wrapperStyle,
       ...rest
     } = props;
 
@@ -43,10 +53,16 @@ export const TextInput = forwardRef<RNTextInput, Readonly<TextInputProps>>(
     };
 
     return (
-      <View style={styles.wrapper}>
-        {label && <Text style={styles.label}>{label}</Text>}
+      <View style={[styles.wrapper, wrapperStyle]}>
+        {label && (
+          <Text
+            style={[styles.label, labelStyle, errorText && styles.inputError]}
+          >
+            {label}
+          </Text>
+        )}
 
-        <View style={[styles.container]}>
+        <View style={[styles.container, containerStyle]}>
           {leftIconName && (
             <EvilIcons
               name={leftIconName}
@@ -93,13 +109,14 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
   },
   input: {
-    backgroundColor: "#E1E3E4",
+    backgroundColor: Colors.inputBackground,
     borderWidth: 2,
-    borderColor: "#E1E3E4",
+    borderColor: Colors.inputBorder,
     borderRadius: 8,
     outlineWidth: 2,
     outlineColor: "black",
     padding: Sizes.padding,
+    fontSize: 16,
   },
   inputError: {
     borderColor: Colors.textError,

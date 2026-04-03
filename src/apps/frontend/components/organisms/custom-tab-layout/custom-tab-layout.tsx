@@ -2,30 +2,62 @@ import TextH2 from "@/components/atoms/text/text-h2-ui";
 import { Colors } from "@/constants";
 import Sizes from "@/constants/sizes";
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import { PropsWithChildren } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 
 export default function CustomTabLayout({
   children,
   title,
-}: Readonly<PropsWithChildren<{ title: string }>>) {
+  name,
+}: Readonly<PropsWithChildren<{ title: string; name: string }>>) {
+  const router = useRouter();
+
+  const isInner = name.includes("[id]") || name.includes("add");
+
+  const handleBackPress = () => {
+    if (router.canGoBack()) {
+      router.back();
+    } else {
+      router.push("/");
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.headerWrapper}>
         <View style={styles.headerContainer}>
-          <View>
-            <TextH2 style={styles.titleText}>{title}</TextH2>
+          <View style={styles.backBtnContainer}>
+            {isInner && (
+              <Pressable style={styles.backBtn}>
+                <Ionicons
+                  name="arrow-back"
+                  size={24}
+                  color={Colors.button}
+                  onPress={handleBackPress}
+                />
+              </Pressable>
+            )}
+
+            <TextH2>{title}</TextH2>
           </View>
 
-          <View>
-            <Pressable style={styles.notifBtn}>
-              <Ionicons
-                name="notifications-outline"
-                color={Colors.button}
-                size={24}
-              />
-            </Pressable>
-          </View>
+          {!isInner && (
+            <View>
+              <Pressable
+                style={styles.notifBtn}
+                onPress={() => {
+                  router.push("/");
+                }}
+              >
+                <Ionicons
+                  name="notifications-outline"
+                  color={Colors.button}
+                  size={24}
+                />
+              </Pressable>
+            </View>
+          )}
         </View>
       </View>
       {children}
@@ -54,10 +86,18 @@ const styles = StyleSheet.create({
   btnContainer: {
     width: "auto",
   },
+  backBtnContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
   notifBtn: {
     borderRadius: 100,
     padding: 8,
     backgroundColor: "white",
   },
-  titleText: {},
+  backBtn: {
+    borderRadius: 100,
+    padding: 8,
+    backgroundColor: "transparent",
+  },
 });

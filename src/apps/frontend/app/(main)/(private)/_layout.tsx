@@ -9,7 +9,10 @@ export default function PrivateLayout() {
     <Tabs
       tabBar={(props) => <CustomTabBar {...props} />}
       screenLayout={(props) => (
-        <CustomTabLayout title={props.options.title ?? props.route.name}>
+        <CustomTabLayout
+          name={props.route.name}
+          title={props.options.title ?? props.route.name}
+        >
           {props.children}
         </CustomTabLayout>
       )}
@@ -63,6 +66,23 @@ export default function PrivateLayout() {
           tabBarIcon: ({ focused }) => (
             <TabButton isFocused={focused} icon="grid" />
           ),
+        }}
+      />
+
+      {/** inner */}
+      <Tabs.Screen
+        name="properties/(inner)/add"
+        options={{
+          title: "Properties",
+          href: null,
+        }}
+      />
+
+      <Tabs.Screen
+        name="properties/(inner)/[id]"
+        options={{
+          title: "Property Details",
+          href: null,
         }}
       />
     </Tabs>

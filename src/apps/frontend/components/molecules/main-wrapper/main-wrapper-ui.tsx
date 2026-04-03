@@ -1,18 +1,16 @@
 import { Button } from "@/components/atoms/button";
+import { TextH1 } from "@/components/atoms/text";
 import Text from "@/components/atoms/text/text-ui";
 import { Colors } from "@/constants";
 import Sizes from "@/constants/sizes";
 import { Ionicons } from "@expo/vector-icons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { FlashList, FlashListProps, ListRenderItem } from "@shopify/flash-list";
-import { PropsWithChildren, ReactElement } from "react";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 import ListCard from "../list-card/list-card";
 import SearchInput from "../search-input/search-input";
 
-interface MainWrapperProps<T> extends PropsWithChildren {
-  StickyHeader?: ReactElement;
-  title?: string;
+interface MainWrapperProps<T> {
   data: T[];
   renderItem: ListRenderItem<T>;
   isFetching?: boolean;
@@ -25,9 +23,6 @@ interface MainWrapperProps<T> extends PropsWithChildren {
 export default function MainWrapper<T extends { id: number }>({
   data,
   renderItem,
-  title,
-  children,
-  StickyHeader,
   isFetching,
   hasMore,
   loadMore,
@@ -36,7 +31,9 @@ export default function MainWrapper<T extends { id: number }>({
 }: Readonly<MainWrapperProps<T>>) {
   const ListHeaderComponent = (
     <View style={styles.wrapper}>
-      <View style={styles.headerContainer}>{/** TODO: text */}</View>
+      <View style={styles.headerContainer}>
+        <TextH1>Manage your properties</TextH1>
+      </View>
     </View>
   );
 
@@ -156,6 +153,7 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     gap: 0,
+    backgroundColor: Colors.neutral,
   },
   scrollContainer: {
     width: "100%",
@@ -166,7 +164,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     maxWidth: Sizes.maxWidth,
     gap: 40,
-    paddingTop: Sizes.padding,
+    paddingVertical: Sizes.padding * 2,
   },
   listItemWrapper: {
     width: "100%",
@@ -181,8 +179,8 @@ const styles = StyleSheet.create({
     width: "100%",
     gap: Sizes.padding,
     maxWidth: Sizes.maxWidth,
-    paddingBottom: Sizes.padding,
-    backgroundColor: Colors.background,
+    paddingVertical: Sizes.padding,
+    backgroundColor: Colors.neutral,
   },
   footerContainer: {
     width: "100%",

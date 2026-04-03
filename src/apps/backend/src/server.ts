@@ -7,9 +7,13 @@ import Fastify from "fastify";
 import { authPlugin } from "./features";
 import { propertiesPlugin } from "./features/properties/plugin";
 import { usersPlugin } from "./features/users";
-import { dbPlugin, errorHandlerPlugin } from "./plugins";
-import { authSetupPlugin } from "./plugins/auth-stepup";
-import { swaggerSetupPlugin } from "./plugins/swagger-setup";
+import {
+  authSetupPlugin,
+  dbPlugin,
+  errorHandlerPlugin,
+  s3Plugin,
+  swaggerSetupPlugin,
+} from "./plugins";
 import { createLogger, Level } from "./utils/logger";
 
 const schema = {
@@ -22,6 +26,10 @@ const schema = {
     "JWT_REFRESH_SECRET",
     "POSTMARK_SERVER_TOKEN",
     "EMAIL_FROM",
+    "AWS_ACCESS_KEY_ID",
+    "AWS_SECRET_ACCESS_KEY",
+    "S3_ENDPOINT",
+    "S3_BUCKET_NAME",
   ],
   properties: {
     PORT: {
@@ -66,6 +74,22 @@ const schema = {
     EMAIL_FROM: {
       type: "string",
     },
+    AWS_REGION: {
+      type: "string",
+      default: "auto",
+    },
+    AWS_ACCESS_KEY_ID: {
+      type: "string",
+    },
+    AWS_SECRET_ACCESS_KEY: {
+      type: "string",
+    },
+    S3_ENDPOINT: {
+      type: "string",
+    },
+    S3_BUCKET_NAME: {
+      type: "string",
+    },
   },
 };
 
@@ -95,18 +119,22 @@ export const createServer = async () => {
     secret: fastify.config.COOKIE_SECRET,
   });
   await fastify.register(dbPlugin);
+  await fastify.register(s3Plugin);
 
   await fastify.register(cors, {
     credentials: true,
     origin: (origin, cb) => {
-      const hostname = new URL(origin!).hostname;
-      if (hostname === "localhost") {
-        //  Request from localhost will pass
-        cb(null, true);
-        return;
+      try {
+        const hostname = new URL(origin!).hostname;
+        if (hostname === "localhost") {
+          cb(null, true);
+          return;
+        }
+
+        cb(new Error("Not allowed"), false);
+      } catch (err) {
+        cb(new Error("Invalid origin"), false);
       }
-      // Generate an error on other origins, disabling access
-      cb(new Error("Not allowed"), false);
     },
   });
 
