@@ -3,14 +3,7 @@ import Colors from "@/constants/colors-old";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { TabTriggerSlotProps } from "expo-router/ui";
 import { ComponentProps, Ref } from "react";
-import {
-  Pressable,
-  StyleProp,
-  StyleSheet,
-  Text,
-  View,
-  ViewStyle,
-} from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 export type Icon = ComponentProps<typeof Ionicons>["name"];
 
 export type TabButtonProps = TabTriggerSlotProps & {
@@ -25,17 +18,10 @@ export default function TabButton({
   ...props
 }: Readonly<TabButtonProps>) {
   const iconName = `${icon}-outline` as Icon;
-  let btnStyles: StyleProp<ViewStyle> = {};
-
-  if (isFocused) {
-    btnStyles = {
-      backgroundColor: Colors.surface,
-    };
-  }
 
   return (
     <View style={styles.tabButtonWrapper}>
-      <Pressable {...props} style={[styles.tabButton, btnStyles]}>
+      <Pressable {...props} style={styles.tabButton}>
         <View
           style={{
             position: "absolute",
@@ -50,7 +36,9 @@ export default function TabButton({
           <Ionicons name={iconName} color={Colors.surface} size={24} />
         </View>
 
-        {isFocused && <GradientIcon name={icon} />}
+        <View style={{ opacity: isFocused ? 1 : 0 }}>
+          <GradientIcon name={icon} isFocused={isFocused} />
+        </View>
 
         <Text
           style={[
@@ -69,6 +57,7 @@ const styles = StyleSheet.create({
   tabButtonWrapper: {
     justifyContent: "center",
     alignItems: "center",
+    overflow: "hidden",
   },
   tabButton: {
     display: "flex",

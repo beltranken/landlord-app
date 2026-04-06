@@ -103,10 +103,6 @@ export const relations = defineRelations(schema, (r) => ({
       from: r.tenantsTable.organizationId,
       to: r.organizationsTable.id,
     }),
-    parent: r.one.tenantsTable({
-      from: r.tenantsTable.parentId,
-      to: r.tenantsTable.id,
-    }),
     user: r.one.usersTable({
       from: r.tenantsTable.userId,
       to: r.usersTable.id,
@@ -119,9 +115,9 @@ export const relations = defineRelations(schema, (r) => ({
       from: r.tenantsTable.id,
       to: r.tenantReferencesTable.tenantId,
     }),
-    rents: r.many.rentsTable({
+    rentTenants: r.many.rentTenantsTable({
       from: r.tenantsTable.id,
-      to: r.rentsTable.tenantId,
+      to: r.rentTenantsTable.tenantId,
     }),
   },
 
@@ -144,9 +140,9 @@ export const relations = defineRelations(schema, (r) => ({
       from: r.rentsTable.propertyId,
       to: r.propertiesTable.id,
     }),
-    tenant: r.one.tenantsTable({
-      from: r.rentsTable.tenantId,
-      to: r.tenantsTable.id,
+    rentTenants: r.many.rentTenantsTable({
+      from: r.rentsTable.id,
+      to: r.rentTenantsTable.rentId,
     }),
     charges: r.many.rentChargesTable({
       from: r.rentsTable.id,
@@ -159,6 +155,17 @@ export const relations = defineRelations(schema, (r) => ({
     payments: r.many.paymentsTable({
       from: r.rentsTable.id,
       to: r.paymentsTable.rentId,
+    }),
+  },
+
+  rentTenantsTable: {
+    rent: r.one.rentsTable({
+      from: r.rentTenantsTable.rentId,
+      to: r.rentsTable.id,
+    }),
+    tenant: r.one.tenantsTable({
+      from: r.rentTenantsTable.tenantId,
+      to: r.tenantsTable.id,
     }),
   },
 

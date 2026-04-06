@@ -1,33 +1,16 @@
-import { getProperties } from "@/api/sdk.gen";
 import MainWrapper from "@/components/molecules/main-wrapper/main-wrapper-ui";
 import PropertyCard from "@/components/molecules/property-card/property-card-ui";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import useProperties from "@/hooks/queries/useProperties";
+import { Property } from "@/types";
 import { useRouter } from "expo-router";
 
 export default function PropertiesPage() {
   const router = useRouter();
 
-  const { data, isFetching, fetchNextPage, hasNextPage } = useInfiniteQuery({
-    queryKey: ["properties"],
-    queryFn: async ({ pageParam = 1 }) => {
-      const response = await getProperties({
-        query: { page: pageParam },
-      });
+  const { data, isFetching, fetchNextPage, hasNextPage } = useProperties();
 
-      if (!response.data || response.error) {
-        throw new Error(
-          response.error?.message ?? "Failed to fetch properties",
-        );
-      }
-
-      return response.data;
-    },
-    initialPageParam: 1,
-    getNextPageParam: (lastPage) =>
-      lastPage.hasMore ? lastPage.page + 1 : undefined,
-  });
-
-  const properties = data?.pages.flatMap((page) => page.data) ?? [];
+  const properties =
+    data?.pages.flatMap((page) => page.data as Property[]) ?? [];
 
   const handleOnAdd = () => {
     router.push("/properties/add");
@@ -35,6 +18,7 @@ export default function PropertiesPage() {
 
   return (
     <MainWrapper
+      title="Manage your properties"
       addButtonPressed={handleOnAdd}
       addButtonText="Add Property"
       data={properties}

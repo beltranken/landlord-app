@@ -1,18 +1,17 @@
 import { TextH4 } from "@/components/atoms/text";
 import { Colors } from "@/constants";
 import Sizes from "@/constants/sizes";
-import { ReactNode } from "react";
+import { PropsWithChildren } from "react";
 import { StyleSheet, View } from "react-native";
 
 export type CardSectionProps = {
   title?: string;
-  children: ReactNode;
 };
 
 export default function CardSection({
   title,
   children,
-}: Readonly<CardSectionProps>) {
+}: Readonly<PropsWithChildren<CardSectionProps>>) {
   return (
     <View style={styles.cardWrapper}>
       {title && <TextH4>{title}</TextH4>}

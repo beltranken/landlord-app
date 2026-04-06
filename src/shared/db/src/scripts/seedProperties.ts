@@ -1,3 +1,4 @@
+import { faker } from "@faker-js/faker";
 import "dotenv/config";
 import { initDb } from "../initDb";
 import {
@@ -42,64 +43,55 @@ const seedProperties = async () => {
       );
     }
 
-    const properties = [
-      {
-        organizationId: organization.id,
-        propertyStatus: PropertyStatus.AVAILABLE,
-        name: "Downtown Apartment 101",
-        type: PropertyType.APARTMENT,
-        defaultRentFrequency: RentFrequency.MONTHLY,
-        defaultRentAmount: 120000,
-        address1: "123 Main St",
-        city: "Sample City",
-        state: "Sample State",
-        postalCode: "12345",
-        country: "Sample Country",
-        latitude: null,
-        longitude: null,
-        createdBy: user.id,
-        updatedBy: user.id,
-      },
-      {
-        organizationId: organization.id,
-        propertyStatus: PropertyStatus.AVAILABLE,
-        name: "Suburban House",
-        type: PropertyType.CONDO,
-        defaultRentFrequency: RentFrequency.MONTHLY,
-        defaultRentAmount: 250000,
-        address1: "456 Oak Ave",
-        city: "Sample City",
-        state: "Sample State",
-        postalCode: "67890",
-        country: "Sample Country",
-        latitude: null,
-        longitude: null,
-        createdBy: user.id,
-        updatedBy: user.id,
-      },
-      {
-        organizationId: organization.id,
-        propertyStatus: PropertyStatus.UNDER_MAINTENANCE,
-        name: "Room 12B",
-        type: PropertyType.ROOM,
-        defaultRentFrequency: RentFrequency.MONTHLY,
-        defaultRentAmount: 80000,
-        address1: "789 Pine Rd",
-        city: "Sample City",
-        state: "Sample State",
-        postalCode: "24680",
-        country: "Sample Country",
-        latitude: null,
-        longitude: null,
-        createdBy: user.id,
-        updatedBy: user.id,
-      },
+    const PROPERTY_COUNT = 10;
+
+    const PHILIPPINE_LOCATIONS = [
+      { city: "Quezon City", state: "Metro Manila" },
+      { city: "Manila", state: "Metro Manila" },
+      { city: "Makati", state: "Metro Manila" },
+      { city: "Cebu City", state: "Cebu" },
+      { city: "Davao City", state: "Davao del Sur" },
+      { city: "Iloilo City", state: "Iloilo" },
+      { city: "Baguio", state: "Benguet" },
     ];
+
+    const properties = Array.from({ length: PROPERTY_COUNT }, (_, index) => {
+      const type = faker.helpers.arrayElement([
+        PropertyType.APARTMENT,
+        PropertyType.CONDO,
+        PropertyType.ROOM,
+        PropertyType.COMPLEX,
+      ]);
+
+      const { city, state } = faker.helpers.arrayElement(PHILIPPINE_LOCATIONS);
+      const country = "Philippines";
+
+      return {
+        organizationId: organization.id,
+        status: PropertyStatus.AVAILABLE,
+        name: `${city} ${type} ${index + 1}`,
+        type,
+        defaultRentFrequency: RentFrequency.MONTHLY,
+        defaultRentAmount: faker.number.int({ min: 80000, max: 300000 }),
+        address1: faker.location.streetAddress(true),
+        city,
+        state,
+        postalCode: faker.location.zipCode(),
+        country,
+        latitude: null,
+        longitude: null,
+        createdBy: user.id,
+        updatedBy: user.id,
+      };
+    });
 
     const insertedProperties = await db
       .insert(propertiesTable)
       .values(properties)
-      .returning({ id: propertiesTable.id, name: propertiesTable.name });
+      .returning({
+        id: propertiesTable.id,
+        type: propertiesTable.type,
+      });
 
     const featureTypes = await db
       .select({
@@ -107,6 +99,10 @@ const seedProperties = async () => {
         name: propertyFeatureTypesTable.name,
       })
       .from(propertyFeatureTypesTable);
+
+    console.log(
+      `Fetched ${JSON.stringify(featureTypes, null, 2)} property feature types for seeding property features.`,
+    );
 
     const getFeatureTypeId = (featureName: string) => {
       const featureType = featureTypes.find((ft) => ft.name === featureName);
@@ -123,25 +119,36 @@ const seedProperties = async () => {
     const propertyFeatures = insertedProperties.flatMap((property) => {
       const featuresForProperty: { featureName: string; value: string }[] = [];
 
-      switch (property.name) {
-        case "Downtown Apartment 101":
+      switch (property.type) {
+        case PropertyType.APARTMENT:
+        case PropertyType.CONDO:
+        case PropertyType.COMPLEX:
           featuresForProperty.push(
-            { featureName: "Bedroom", value: "2" },
-            { featureName: "Bathroom", value: "1" },
-            { featureName: "Parking spot", value: "1" },
+            {
+              featureName: "Floor area",
+              value: String(faker.number.int({ min: 20, max: 100 })),
+            },
+            {
+              featureName: "Bedroom",
+              value: String(faker.number.int({ min: 1, max: 4 })),
+            },
+            {
+              featureName: "Bathroom",
+              value: String(faker.number.int({ min: 1, max: 3 })),
+            },
+            {
+              featureName: "Parking",
+              value: String(faker.number.int({ min: 0, max: 3 })),
+            },
           );
           break;
-        case "Suburban House":
-          featuresForProperty.push(
-            { featureName: "Bedroom", value: "3" },
-            { featureName: "Bathroom", value: "2" },
-            { featureName: "Parking spot", value: "2" },
-          );
-          break;
-        case "Room 12B":
+        case PropertyType.ROOM:
           featuresForProperty.push(
             { featureName: "Bedroom", value: "1" },
-            { featureName: "Bathroom", value: "1" },
+            {
+              featureName: "Bathroom",
+              value: String(faker.number.int({ min: 1, max: 2 })),
+            },
           );
           break;
         default:
@@ -151,7 +158,6 @@ const seedProperties = async () => {
       return featuresForProperty.map(({ featureName, value }) => ({
         propertyId: property.id,
         propertyFeatureTypeId: getFeatureTypeId(featureName),
-        name: featureName,
         value,
         createdBy: user.id,
         updatedBy: user.id,

@@ -11,6 +11,7 @@ import ListCard from "../list-card/list-card";
 import SearchInput from "../search-input/search-input";
 
 interface MainWrapperProps<T> {
+  title: string;
   data: T[];
   renderItem: ListRenderItem<T>;
   isFetching?: boolean;
@@ -21,6 +22,7 @@ interface MainWrapperProps<T> {
 }
 
 export default function MainWrapper<T extends { id: number }>({
+  title,
   data,
   renderItem,
   isFetching,
@@ -32,7 +34,7 @@ export default function MainWrapper<T extends { id: number }>({
   const ListHeaderComponent = (
     <View style={styles.wrapper}>
       <View style={styles.headerContainer}>
-        <TextH1>Manage your properties</TextH1>
+        <TextH1>{title}</TextH1>
       </View>
     </View>
   );

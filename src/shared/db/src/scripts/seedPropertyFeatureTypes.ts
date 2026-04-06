@@ -8,6 +8,12 @@ const seedPropertyFeatureTypes = async () => {
 
   const featureTypes = [
     {
+      name: "Floor area",
+      type: PropertyFeatureTypes.NUMBER,
+      options: null,
+      unit: "sqmt",
+    },
+    {
       name: "Bedroom",
       type: PropertyFeatureTypes.NUMBER,
       options: null,
@@ -18,15 +24,14 @@ const seedPropertyFeatureTypes = async () => {
       options: null,
     },
     {
-      name: "Parking spot",
+      name: "Kitchen",
       type: PropertyFeatureTypes.NUMBER,
       options: null,
     },
     {
-      name: "Floor area",
+      name: "Parking",
       type: PropertyFeatureTypes.NUMBER,
       options: null,
-      unit: "sqmt",
     },
     {
       name: "Garden",
@@ -43,44 +48,14 @@ const seedPropertyFeatureTypes = async () => {
       type: PropertyFeatureTypes.OPTION,
       options: JSON.stringify([
         "unfurnished",
-        "part furnished",
+        "semi furnished",
         "fully furnished",
       ]),
     },
     {
-      name: "Appliances included",
-      type: PropertyFeatureTypes.OPTION,
-      options: JSON.stringify([
-        "fridge",
-        "stove",
-        "oven",
-        "dishwasher",
-        "washer",
-        "dryer",
-        "microwave",
-      ]),
-    },
-    {
-      name: "Heating type",
-      type: PropertyFeatureTypes.OPTION,
-      options: JSON.stringify([
-        "none",
-        "electric",
-        "gas",
-        "central",
-        "radiator",
-        "underfloor",
-      ]),
-    },
-    {
-      name: "Cooling type",
-      type: PropertyFeatureTypes.OPTION,
-      options: JSON.stringify([
-        "none",
-        "ac unit",
-        "central ac",
-        "evaporative cooling",
-      ]),
+      name: "Others",
+      type: PropertyFeatureTypes.TEXT,
+      options: null,
     },
   ];
 

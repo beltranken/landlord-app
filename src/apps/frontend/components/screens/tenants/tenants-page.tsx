@@ -1,38 +1,40 @@
-import MainHeader from "@/components/molecules/main-header/main-header-ui";
+import { Text, TextH4 } from "@/components/atoms/text";
 import MainWrapper from "@/components/molecules/main-wrapper/main-wrapper-ui";
+import { useTenants } from "@/hooks/queries/useTenants";
+import { Tenant } from "@/types";
 import { StyleSheet, View } from "react-native";
 
-export default function Tenants() {
+export default function TenantsPage() {
+  const { data, isFetching, fetchNextPage, hasNextPage } = useTenants();
+
+  const tenants: Tenant[] =
+    data?.pages.flatMap((page) => page.data as Tenant[]) ?? [];
+
   return (
     <MainWrapper
-      title="Tenants"
-      StickyHeader={<MainHeader />}
-      data={[{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]}
-      renderItem={({ index }) => (
-        <View
-          style={[
-            styles.test,
-            { backgroundColor: index % 2 === 0 ? "green" : "blue" },
-          ]}
-        ></View>
+      title="Manage your tenants"
+      data={tenants}
+      hasMore={!!hasNextPage}
+      isFetching={isFetching}
+      loadMore={fetchNextPage}
+      renderItem={({ item }) => (
+        <View style={styles.tenantContainer}>
+          <TextH4>
+            {item.firstName} {item.lastName}
+          </TextH4>
+
+          {item.email && <Text>{item.email}</Text>}
+          {item.phone && <Text>{item.phone}</Text>}
+          {item.relationship && <Text>{item.relationship}</Text>}
+        </View>
       )}
-    ></MainWrapper>
+    />
   );
 }
 
 const styles = StyleSheet.create({
-  contentContainer: {
-    gap: 20,
-    paddingBottom: 60,
-  },
-  stickyHeaderWrapper: {
-    paddingHorizontal: 20,
-    zIndex: 10,
-    flexDirection: "row",
-    gap: 20,
-  },
-  test: {
-    height: 450,
-    width: "100%",
+  tenantContainer: {
+    padding: 16,
+    gap: 4,
   },
 });

@@ -35,4 +35,6 @@ export const Colors = {
 
   inputBackground: "#E1E3E4",
   inputBorder: "#D0D3D4",
+
+  accentGradient: ["#FF0080", "#7928CA"],
 } as const;

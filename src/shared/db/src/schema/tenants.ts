@@ -1,48 +1,27 @@
-import {
-  boolean,
-  date,
-  foreignKey,
-  integer,
-  pgTable,
-  text,
-  varchar,
-} from "drizzle-orm/pg-core";
+import { date, integer, pgTable, text, varchar } from "drizzle-orm/pg-core";
 
 import { address, timestamps } from "./common";
 import { organizationsTable, userAudit, usersTable } from "./users";
 
-export const tenantsTable = pgTable(
-  "tenants",
-  {
-    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-    organizationId: integer("organization_id")
-      .notNull()
-      .references(() => organizationsTable.id, { onDelete: "cascade" }),
-    firstName: varchar("first_name", { length: 255 }).notNull(),
-    lastName: varchar("last_name", { length: 255 }).notNull(),
-    email: varchar("email", { length: 255 }),
-    phone: varchar("phone", { length: 20 }),
-    dateOfBirth: date("date_of_birth"),
-    ...address,
-    addressSameAsParent: boolean("address_same_as_parent")
-      .default(false)
-      .notNull(),
-    relationship: varchar("relationship", { length: 255 }),
-    parentId: integer("parent_id"),
-    userId: integer("user_id").references(() => usersTable.id, {
-      onDelete: "set null",
-    }),
-    ...timestamps,
-    ...userAudit,
-  },
-  (table) => [
-    foreignKey({
-      columns: [table.parentId],
-      foreignColumns: [table.id],
-      name: "tenants_parent_id",
-    }),
-  ],
-);
+export const tenantsTable = pgTable("tenants", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  organizationId: integer("organization_id")
+    .notNull()
+    .references(() => organizationsTable.id, { onDelete: "cascade" }),
+  firstName: varchar("first_name", { length: 255 }).notNull(),
+  lastName: varchar("last_name", { length: 255 }).notNull(),
+  email: varchar("email", { length: 255 }),
+  phone: varchar("phone", { length: 20 }),
+  dateOfBirth: date("date_of_birth"),
+  ...address,
+  relationship: varchar("relationship", { length: 255 }),
+
+  userId: integer("user_id").references(() => usersTable.id, {
+    onDelete: "set null",
+  }),
+  ...timestamps,
+  ...userAudit,
+});
 
 // Relations are defined centrally using defineRelations in ../relations.ts
 

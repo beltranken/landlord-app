@@ -43,11 +43,6 @@ export async function register(
 
   const hashedPassword = await bcrypt.hash(data.password, 10);
 
-  let image: string | undefined;
-  if (data.image) {
-    // TODO: generate
-  }
-
   let dateOfBirth: Date | undefined;
 
   if (data.dateOfBirth) {
@@ -72,7 +67,6 @@ export async function register(
         email: data.email,
         firstName: data.firstName,
         lastName: data.lastName,
-        image,
         passwordHash: hashedPassword,
         phone: data.phone,
         dateOfBirth,
@@ -99,7 +93,7 @@ export async function register(
       userId,
     });
 
-    const token = fastify.jwt.sign({ userId });
+    const token = fastify.jwt.sign({ userId, organizationId });
     fastify.log.debug(`token: ${token}`);
 
     await postMarkClient.sendEmail({

@@ -64,7 +64,11 @@ export default function ImageUpload({
         </View>
       ) : (
         <Pressable
-          style={[styles.container, errorText && styles.containerError]}
+          style={[
+            styles.container,
+            { paddingVertical: Sizes.padding * 2 },
+            errorText && styles.containerError,
+          ]}
           onPress={handleOnPress}
         >
           <View style={styles.emptyContainer}>
@@ -117,7 +121,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   imageContainer: {
-    minHeight: 300,
+    minHeight: 250,
     overflow: "hidden",
     borderWidth: 0,
   },

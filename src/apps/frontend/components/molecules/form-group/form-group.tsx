@@ -1,19 +1,20 @@
 import { Text } from "@/components/atoms/text";
 import { Sizes } from "@/constants";
-import { ReactNode } from "react";
-import { StyleSheet, View } from "react-native";
+import { PropsWithChildren } from "react";
+import { StyleSheet, View, ViewStyle } from "react-native";
 
 export interface FormGroupProps {
   label: string;
-  children: ReactNode;
+  style?: ViewStyle;
 }
 
 export default function FormGroup({
   label,
   children,
-}: Readonly<FormGroupProps>) {
+  style,
+}: Readonly<PropsWithChildren<FormGroupProps>>) {
   return (
-    <View style={styles.formGroup}>
+    <View style={[styles.formGroup, style]}>
       <Text style={styles.formGroupLabel}>{label}</Text>
 
       {children}

@@ -42,3 +42,10 @@ export type ImageUploadRequest = z.infer<typeof imageUploadRequestSchema>;
 z.globalRegistry.add(imageUploadRequestSchema, {
   id: "ImageUploadRequest",
 });
+
+export type WithOrganizationId<T> = T & { organizationId: number };
+
+export type WithUserIdAndOrganizationId<T> = T & {
+  organizationId: number;
+  userId: number;
+};

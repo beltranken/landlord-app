@@ -18,7 +18,7 @@ export default defineConfig({
       name: "@hey-api/transformers",
     },
     {
-      enums: "javascript",
+      enums: "typescript",
       name: "@hey-api/typescript",
     },
     {

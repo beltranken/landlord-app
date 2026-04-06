@@ -1,4 +1,11 @@
-import { boolean, date, integer, pgTable, text } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  date,
+  integer,
+  pgTable,
+  text,
+  varchar,
+} from "drizzle-orm/pg-core";
 
 import { RentFrequency, RentStatus } from "../types/enums";
 
@@ -13,9 +20,6 @@ export const rentsTable = pgTable("rents", {
   propertyId: integer("property_id")
     .notNull()
     .references(() => propertiesTable.id, { onDelete: "cascade" }),
-  tenantId: integer("tenant_id")
-    .notNull()
-    .references(() => tenantsTable.id, { onDelete: "cascade" }),
   startDate: date("start_date").notNull(),
   endDate: date("end_date").notNull(),
   frequency: rentFrequencyEnum("frequency")
@@ -29,7 +33,19 @@ export const rentsTable = pgTable("rents", {
   ...userAudit,
 });
 
-export const rentChargesTable = pgTable("rent_changes", {
+export const rentTenantsTable = pgTable("rent_tenants", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  rentId: integer("rent_id")
+    .notNull()
+    .references(() => rentsTable.id, { onDelete: "cascade" }),
+  tenantId: integer("tenant_id")
+    .notNull()
+    .references(() => tenantsTable.id, { onDelete: "cascade" }),
+  isPrimary: boolean("is_primary").notNull().default(false),
+  relationship: varchar("relationship", { length: 255 }),
+});
+
+export const rentChargesTable = pgTable("rent_charges", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
   rentId: integer("rent_id")
     .notNull()

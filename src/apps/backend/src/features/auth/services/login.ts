@@ -58,6 +58,8 @@ export async function login(
     .limit(1);
   const data = users.at(0);
 
+  fastify.log.debug(`Login attempt data: ${JSON.stringify(data, null, 2)}`);
+
   if (!data) {
     throw new Unauthorized("Invalid email or password");
   }

@@ -6,7 +6,7 @@ import ImageUpload from "@/components/molecules/image-upload/image-upload";
 import InnerWrapper from "@/components/molecules/inner-wrapper/inner-wrapper-ui";
 import Sizes from "@/constants/sizes";
 import { PropertyType, RentFrequency } from "@/enums";
-import { useCreateProperty } from "@/hooks/useCreateProperty";
+import { useCreateProperty } from "@/hooks/mutations/useCreateProperty";
 import useSubmittedError from "@/hooks/useSubmittedError";
 import { CreateProperty, createPropertySchema } from "@/types";
 import capitalize from "@/utils/string";

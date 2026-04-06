@@ -16,7 +16,7 @@ export async function getProperties(
   fastify: FastifyInstance,
   { organizationId, filter = {}, page = 1, pageSize = 50 }: GetPropertiesParam,
 ) {
-  fastify.log.info(
+  fastify.log.debug(
     `Getting properties with filter: ${JSON.stringify(filter)}, page: ${page}, pageSize: ${pageSize}`,
   );
 

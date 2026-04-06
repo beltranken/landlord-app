@@ -8,6 +8,8 @@ import {
 } from "../schema";
 import { UserRole, UserStatus } from "../types/enums";
 
+import bcrypt from "bcrypt";
+
 const seedOrganizationAndUser = async () => {
   const { db, pool } = initDb();
 
@@ -52,8 +54,7 @@ const seedOrganizationAndUser = async () => {
 
       // bcrypt hash for the default password above with salt rounds = 10
       // Generated once and stored here so this script can run without bcrypt as a dependency.
-      const passwordHash =
-        "$2b$10$wZ0pM8Xv3EoFZpDqW9CNkeuAwhLz6Hy1SLKQhiWbtjL9L1koXSPK6";
+      const passwordHash = await bcrypt.hash(defaultPassword, 10);
 
       const insertedUsers = await db
         .insert(usersTable)

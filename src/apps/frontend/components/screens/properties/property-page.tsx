@@ -1,30 +1,21 @@
 import { Button } from "@/components/atoms/button";
 import { TextH2 } from "@/components/atoms/text";
+import CardSection from "@/components/molecules/card-section/card-section-ui";
 import ImageUpload from "@/components/molecules/image-upload/image-upload";
 import InnerWrapper from "@/components/molecules/inner-wrapper/inner-wrapper-ui";
 import PropertyAddressUI from "@/components/molecules/property-card/property-address-ui";
+import PropertyFeatureField from "@/components/molecules/property-feature/property-feature-field";
 import PropertyStatusUI from "@/components/molecules/property-status/property-status-ui";
 import { Colors } from "@/constants";
 import Sizes from "@/constants/sizes";
-import { PropertyType, RentFrequency } from "@/enums";
-import { useProperty } from "@/hooks/useProperty";
-import { useUpdateProperty } from "@/hooks/useUpdateProperty";
+import { PropertyFeatureTypes } from "@/enums";
+import { useUpdateProperty } from "@/hooks/mutations/useUpdateProperty";
+import { useProperty } from "@/hooks/queries/useProperty";
 import { CreateProperty } from "@/types";
-import capitalize from "@/utils/string";
 import { ImagePickerAsset } from "expo-image-picker";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
-
-const propertyTypeOptions = Object.values(PropertyType).map((type) => ({
-  id: type,
-  label: capitalize(type),
-}));
-
-const rentFrequencyOptions = Object.values(RentFrequency).map((type) => ({
-  id: type,
-  label: capitalize(type),
-}));
 
 export default function PropertyPage() {
   const { id } = useLocalSearchParams();
@@ -108,6 +99,29 @@ export default function PropertyPage() {
             View contracts
           </Button>
         </View>
+
+        <CardSection title="Features">
+          {property.features && property.features.length > 0 ? (
+            property.features.map((feature) => (
+              <PropertyFeatureField
+                key={feature.id}
+                feature={{
+                  ...feature,
+                  featureType: feature.featureType
+                    ? {
+                        ...feature.featureType,
+                        type: feature.featureType.type as PropertyFeatureTypes,
+                      }
+                    : undefined,
+                }}
+              />
+            ))
+          ) : (
+            <View>
+              <TextH2>No features available</TextH2>
+            </View>
+          )}
+        </CardSection>
       </View>
     </InnerWrapper>
   );

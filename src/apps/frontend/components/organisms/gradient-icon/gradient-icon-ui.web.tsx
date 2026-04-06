@@ -1,17 +1,18 @@
 import Colors from "@/constants/colors-old";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { LinearGradient } from "expo-linear-gradient";
-import { ComponentProps } from "react";
 import { View } from "react-native";
 import MaskedView from "../masked-view/masked-view.web";
+import { GradientIconProps } from "./gradient-type";
 
 export default function GradientIcon({
   name,
   size = 24,
-}: Readonly<{ size?: number; name: ComponentProps<typeof Ionicons>["name"] }>) {
+  isFocused,
+}: Readonly<GradientIconProps>) {
   return (
     <MaskedView
-      style={{ width: size, height: size }}
+      style={[{ width: size, height: size }]}
       maskElement={
         <View
           style={{

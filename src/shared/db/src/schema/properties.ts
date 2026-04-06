@@ -68,6 +68,7 @@ export const propertyFeatureTypesTable = pgTable("property_feature_types", {
     .default(PropertyFeatureTypes.TEXT),
   options: text("options"),
   unit: varchar("unit", { length: 50 }),
+  icon: varchar("icon", { length: 100 }),
   ...timestamps,
 });
 
@@ -79,7 +80,7 @@ export const propertyFeaturesTable = pgTable("property_features", {
   propertyFeatureTypeId: integer("property_feature_type_id")
     .notNull()
     .references(() => propertyFeatureTypesTable.id, { onDelete: "restrict" }),
-  name: varchar("name", { length: 255 }).notNull(),
+  name: varchar("name", { length: 255 }),
   value: text("value"),
   ...timestamps,
   ...userAudit,

@@ -16,6 +16,8 @@ export type Property = typeof propertiesTable.$inferSelect & {
 
 export const propertySchema = createSelectSchema(propertiesTable, {
   image: z.string().optional().nullable(),
+}).extend({
+  features: z.array(propertyFeatureSchema).optional().nullable(),
 });
 
 export const propertiesResponseSchema = baseResponseWithPagingSchema.extend({

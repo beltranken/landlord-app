@@ -18,7 +18,7 @@ export default function MaskedView({
     domToPng(maskRef.current).then((dataUrl) => {
       setMask(dataUrl);
     });
-  }, []);
+  }, [children]);
 
   useEffect(() => {
     const observer = new ResizeObserver(snapShot);
