@@ -1,5 +1,5 @@
 import TextH2 from "@/components/atoms/text/text-h2-ui";
-import { Colors } from "@/constants";
+import { BaseStyles, Colors } from "@/constants";
 import Sizes from "@/constants/sizes";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
@@ -43,9 +43,22 @@ export default function CustomTabLayout({
           </View>
 
           {!isInner && (
-            <View>
+            <View style={styles.btnContainer}>
               <Pressable
-                style={styles.notifBtn}
+                style={styles.actionBtn}
+                onPress={() => {
+                  router.push("/");
+                }}
+              >
+                <Ionicons
+                  name="person-outline"
+                  color={Colors.button}
+                  size={24}
+                />
+              </Pressable>
+
+              <Pressable
+                style={styles.actionBtn}
                 onPress={() => {
                   router.push("/");
                 }}
@@ -84,16 +97,20 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   btnContainer: {
-    width: "auto",
+    flexDirection: "row",
+    gap: Sizes.padding * 0.5,
   },
   backBtnContainer: {
     flexDirection: "row",
     alignItems: "center",
   },
-  notifBtn: {
+  actionBtn: {
     borderRadius: 100,
     padding: 8,
     backgroundColor: "white",
+    borderWidth: 1,
+    borderColor: Colors.neutral,
+    ...BaseStyles.shadow,
   },
   backBtn: {
     borderRadius: 100,

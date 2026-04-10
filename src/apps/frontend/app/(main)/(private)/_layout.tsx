@@ -77,11 +77,18 @@ export default function PrivateLayout() {
           href: null,
         }}
       />
-
       <Tabs.Screen
         name="properties/(inner)/[id]"
         options={{
           title: "Property Details",
+          href: null,
+        }}
+      />
+
+      <Tabs.Screen
+        name="tenants/[id]/index"
+        options={{
+          title: "Tenant Details",
           href: null,
         }}
       />

@@ -42,7 +42,7 @@ export default function InnerWrapper({
 
         {children}
 
-        {onSubmit && (
+        {onSubmit ? (
           <View style={styles.btnContainer}>
             <Button onPress={onSubmit}>{submitButtonLabel}</Button>
 
@@ -55,6 +55,8 @@ export default function InnerWrapper({
               {backButtonLabel}
             </Button>
           </View>
+        ) : (
+          <View></View>
         )}
 
         <Loading visible={isLoading} />

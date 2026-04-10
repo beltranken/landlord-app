@@ -12,13 +12,9 @@ import PropertyPrice from "./property-price-ui";
 
 export interface PropertyCardProps {
   item: Property;
-  index: number;
 }
 
-export default function PropertyCard({
-  item,
-  index,
-}: Readonly<PropertyCardProps>) {
+export default function PropertyCard({ item }: Readonly<PropertyCardProps>) {
   const router = useRouter();
 
   return (

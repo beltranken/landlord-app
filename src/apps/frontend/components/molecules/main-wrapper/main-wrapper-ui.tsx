@@ -107,6 +107,9 @@ export default function MainWrapper<T extends { id: number }>({
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.5}
         ItemSeparatorComponent={ItemSeparatorComponent}
+        keyExtractor={(item, index) =>
+          "id" in item ? item["id"].toString() : `header-${index}`
+        }
         renderItem={(param) => {
           if ("type" in param.item && param.item.type === "header") {
             return param.item.element;

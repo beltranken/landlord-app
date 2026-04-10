@@ -4,5 +4,6 @@ export * from "./types/organization";
 export * from "./types/property";
 export * from "./types/property-feature";
 export * from "./types/property-feature-type";
+export * from "./types/rents";
 export * from "./types/tenants";
 export * from "./types/user";

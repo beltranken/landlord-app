@@ -22,6 +22,12 @@ z.globalRegistry.add(baseResponseWithPagingSchema, {
   id: "BaseResponseWithPaging",
 });
 
+export const baseRequestWithPagingSchema = z.object({
+  page: z.coerce.number().int().min(1).default(1).optional(),
+  pageSize: z.coerce.number().int().min(1).max(100).default(50).optional(),
+});
+export type BaseRequestWithPaging = z.infer<typeof baseRequestWithPagingSchema>;
+
 export type BaseResponseWithPaging = z.infer<
   typeof baseResponseWithPagingSchema
 >;
@@ -43,9 +49,29 @@ z.globalRegistry.add(imageUploadRequestSchema, {
   id: "ImageUploadRequest",
 });
 
-export type WithOrganizationId<T> = T & { organizationId: number };
+export type WithOrganizationId<T = {}> = T & { organizationId: number };
 
-export type WithUserIdAndOrganizationId<T> = T & {
+export type WithUserIdAndOrganizationId<T = {}> = T & {
   organizationId: number;
   userId: number;
 };
+
+export const documentTypes = [
+  "image/jpeg",
+  "image/png",
+  "application/pdf",
+  "application/msword",
+] as const;
+
+export const documentUploadRequestSchema = imageUploadRequestSchema.extend({
+  type: z.enum(
+    documentTypes,
+    "Invalid file type. Only JPEG, PNG, PDF, and DOC are allowed.",
+  ),
+});
+
+export type DocumentUploadRequest = z.infer<typeof documentUploadRequestSchema>;
+
+z.globalRegistry.add(documentUploadRequestSchema, {
+  id: "DocumentUploadRequest",
+});

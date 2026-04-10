@@ -10,7 +10,8 @@
     "db:seed:property-feature-types": "tsx ./src/scripts/seedPropertyFeatureTypes.ts",
     "db:seed:org-user": "tsx ./src/scripts/seedOrganizationAndUser.ts",
     "db:seed:properties": "tsx ./src/scripts/seedProperties.ts",
-    "db:seed:tenants": "tsx ./src/scripts/seedTenants.ts"
+    "db:seed:tenants": "tsx ./src/scripts/seedTenants.ts",
+    "db:seed:rents": "tsx ./src/scripts/seedRents.ts"
   },
   "keywords": [],
   "author": "",

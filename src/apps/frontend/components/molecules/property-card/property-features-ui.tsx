@@ -27,7 +27,7 @@ export default function PropertyFeatures({
           return (
             <View key={feature.id} style={styles.featureChip}>
               <Text style={styles.featureText}>
-                {`${feature.value} ${featureType?.unit ? featureType.unit : feature.name}`}
+                {`${feature.value} ${featureType?.unit ? featureType.unit : (feature.name ?? featureType?.name)}`}
               </Text>
             </View>
           );

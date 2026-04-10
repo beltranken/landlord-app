@@ -8,6 +8,7 @@
       "@/constants/*": ["./constants/*"],
       "@/providers/*": ["./providers/*"],
       "@/api/*": ["./api/*"],
+      "@/lib/*": ["./lib/*"],
       "@/validations": ["../../shared/types/src/validations/index"],
       "@/validations/*": ["../../shared/types/src/validations/*"],
       "@/enums": ["../../shared/types/src/enums.ts"],

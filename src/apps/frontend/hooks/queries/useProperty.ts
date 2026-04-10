@@ -1,11 +1,10 @@
-import { getProperty, type GetPropertyResponse } from "@/api";
+import { getProperty } from "@/api";
 import { useQuery } from "@tanstack/react-query";
 
-export type Property = GetPropertyResponse["data"];
 export const PROPERTY_QUERY_KEY = "property";
 
 export function useProperty(propertyId: number) {
-  return useQuery<Property, unknown>({
+  return useQuery({
     queryKey: [PROPERTY_QUERY_KEY, propertyId],
     queryFn: async () => {
       const response = await getProperty({

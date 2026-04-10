@@ -25,9 +25,7 @@ export default function PropertiesPage() {
       hasMore={!!hasNextPage}
       isFetching={isFetching}
       loadMore={fetchNextPage}
-      renderItem={({ index, item }) => (
-        <PropertyCard item={item} index={index} />
-      )}
+      renderItem={({ item }) => <PropertyCard item={item} />}
     />
   );
 }

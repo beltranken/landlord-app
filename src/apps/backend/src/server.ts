@@ -4,10 +4,13 @@ import cookie from "@fastify/cookie";
 import cors from "@fastify/cors";
 import env from "@fastify/env";
 import Fastify from "fastify";
-import { authPlugin } from "./features";
-import { propertiesPlugin } from "./features/properties/plugin";
-import { tenantsPlugin } from "./features/tenants/plugin";
-import { usersPlugin } from "./features/users";
+import {
+  authPlugin,
+  propertiesPlugin,
+  rentsPlugin,
+  tenantsPlugin,
+  usersPlugin,
+} from "./features";
 import {
   authSetupPlugin,
   dbPlugin,
@@ -149,6 +152,7 @@ export const createServer = async () => {
   await fastify.register(usersPlugin, { prefix: "/api/users" });
   await fastify.register(propertiesPlugin, { prefix: "/api/properties" });
   await fastify.register(tenantsPlugin, { prefix: "/api/tenants" });
+  await fastify.register(rentsPlugin, { prefix: "/api/rents" });
 
   await fastify.ready();
 

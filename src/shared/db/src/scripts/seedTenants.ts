@@ -2,7 +2,12 @@ import { faker } from "@faker-js/faker";
 import "dotenv/config";
 
 import { initDb } from "../initDb";
-import { organizationsTable, tenantsTable, usersTable } from "../schema";
+import {
+  organizationsTable,
+  tenantFilesTable,
+  tenantsTable,
+  usersTable,
+} from "../schema";
 
 const seedTenants = async () => {
   const { db, pool } = initDb();
@@ -64,7 +69,7 @@ const seedTenants = async () => {
         firstName,
         lastName,
         email: faker.internet.email({ firstName, lastName }),
-        phone: faker.phone.number(),
+        phone: faker.phone.number({ style: "international" }),
         dateOfBirth: birthDate,
         address1: faker.location.streetAddress({ useFullAddress: true }),
         address2: null,
@@ -74,25 +79,38 @@ const seedTenants = async () => {
         country,
         latitude: null,
         longitude: null,
-        relationship: faker.helpers.arrayElement([
-          "Primary tenant",
-          "Co-tenant",
-          "Guarantor",
-          "Spouse",
-        ]),
         userId: null,
         createdBy: user.id,
         updatedBy: user.id,
       };
     });
 
-    await db.insert(tenantsTable).values(tenants).returning({
-      id: tenantsTable.id,
-      firstName: tenantsTable.firstName,
-      lastName: tenantsTable.lastName,
-    });
+    const insertedTenants = await db
+      .insert(tenantsTable)
+      .values(tenants)
+      .returning({
+        id: tenantsTable.id,
+        firstName: tenantsTable.firstName,
+        lastName: tenantsTable.lastName,
+      });
 
-    console.log(`Seeded ${tenants.length} tenants.`);
+    const tenantFiles = insertedTenants.map((tenant, index) => ({
+      tenantId: tenant.id,
+      image: null,
+      name: `Tenant ID ${tenant.id} profile document ${index + 1}`,
+      url: `https://example.com/tenant-files/tenant-${tenant.id}-profile.pdf`,
+      description: `Seeded profile document for ${tenant.firstName} ${tenant.lastName}.`,
+      createdBy: user.id,
+      updatedBy: user.id,
+    }));
+
+    if (tenantFiles.length > 0) {
+      await db.insert(tenantFilesTable).values(tenantFiles);
+    }
+
+    console.log(
+      `Seeded ${tenants.length} tenants and ${tenantFiles.length} tenant files.`,
+    );
 
     process.exit(0);
   } finally {

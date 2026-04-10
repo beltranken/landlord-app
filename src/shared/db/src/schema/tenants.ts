@@ -14,7 +14,6 @@ export const tenantsTable = pgTable("tenants", {
   phone: varchar("phone", { length: 20 }),
   dateOfBirth: date("date_of_birth"),
   ...address,
-  relationship: varchar("relationship", { length: 255 }),
 
   userId: integer("user_id").references(() => usersTable.id, {
     onDelete: "set null",
@@ -22,8 +21,6 @@ export const tenantsTable = pgTable("tenants", {
   ...timestamps,
   ...userAudit,
 });
-
-// Relations are defined centrally using defineRelations in ../relations.ts
 
 export const tenantFilesTable = pgTable("tenant_files", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),

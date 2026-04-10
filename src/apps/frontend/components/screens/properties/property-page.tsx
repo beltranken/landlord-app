@@ -3,15 +3,14 @@ import { TextH2 } from "@/components/atoms/text";
 import CardSection from "@/components/molecules/card-section/card-section-ui";
 import ImageUpload from "@/components/molecules/image-upload/image-upload";
 import InnerWrapper from "@/components/molecules/inner-wrapper/inner-wrapper-ui";
+import NotFound from "@/components/molecules/not-found/not-found-ui";
 import PropertyAddressUI from "@/components/molecules/property-card/property-address-ui";
 import PropertyFeatureField from "@/components/molecules/property-feature/property-feature-field";
 import PropertyStatusUI from "@/components/molecules/property-status/property-status-ui";
 import { Colors } from "@/constants";
 import Sizes from "@/constants/sizes";
 import { PropertyFeatureTypes } from "@/enums";
-import { useUpdateProperty } from "@/hooks/mutations/useUpdateProperty";
 import { useProperty } from "@/hooks/queries/useProperty";
-import { CreateProperty } from "@/types";
 import { ImagePickerAsset } from "expo-image-picker";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
@@ -26,10 +25,6 @@ export default function PropertyPage() {
     >();
 
   const { isLoading, isPending, data: property } = useProperty(Number(id));
-  const updateProperty = useUpdateProperty();
-  const handleOnSubmit = (data: CreateProperty) => {
-    // updateProperty.mutate({ propertyId, body: data });
-  };
 
   useEffect(() => {
     setImage(
@@ -46,11 +41,7 @@ export default function PropertyPage() {
   }
 
   if (property === undefined) {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <TextH2>Property not found</TextH2>
-      </View>
-    );
+    return <NotFound message="Property not found" />;
   }
 
   return (
