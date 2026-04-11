@@ -4,7 +4,7 @@ import {
   organizationUsersTable,
   usersTable,
 } from "@db/schema";
-import { User } from "@db/types";
+import { User, UserRole } from "@db/types";
 import { UserStatus } from "@types";
 import bcrypt from "bcrypt";
 import { FastifyInstance } from "fastify";
@@ -23,6 +23,7 @@ export async function login(
 ): Promise<{
   organizationId: number;
   user: User;
+  role: UserRole;
 }> {
   let password = "";
   let where = [isNull(usersTable.deletedAt)];
@@ -64,7 +65,11 @@ export async function login(
     throw new Unauthorized("Invalid email or password");
   }
 
-  const { users: user, organizations: organization } = data;
+  const {
+    users: user,
+    organizations: organization,
+    organization_users: organizationUser,
+  } = data;
 
   if (user.status === UserStatus.SUSPENDED) {
     throw new Unauthorized("User account is suspended");
@@ -83,5 +88,6 @@ export async function login(
   return {
     organizationId: organization.id,
     user,
+    role: organizationUser.role,
   };
 }

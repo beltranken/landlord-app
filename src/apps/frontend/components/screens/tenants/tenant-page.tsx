@@ -4,8 +4,7 @@ import InnerWrapper from "@/components/molecules/inner-wrapper/inner-wrapper-ui"
 import NotFound from "@/components/molecules/not-found/not-found-ui";
 import { useTenant } from "@/hooks/queries/useTenant";
 import { useLocalSearchParams } from "expo-router";
-import { StyleSheet } from "react-native";
-import TenantFileCard from "./tenant-file-card";
+import TenantFileSection from "./tenant-file-section";
 import TenantHeaderCard from "./tenant-header-card";
 import TenantRentsSection from "./tenant-rents-section";
 
@@ -38,17 +37,7 @@ export default function TenantPage() {
         <TextH2>Payment History</TextH2>
       </CardSection>
 
-      <CardSection>
-        <TextH2>Documents</TextH2>
-
-        {tenant.files?.map((file) => (
-          <TenantFileCard key={file.id} file={file} />
-        ))}
-      </CardSection>
+      <TenantFileSection files={tenant.files} />
     </InnerWrapper>
   );
 }
-
-const styles = StyleSheet.create({
-  notFoundContainer: {},
-});

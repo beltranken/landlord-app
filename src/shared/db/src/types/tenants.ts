@@ -33,3 +33,19 @@ export const createTenantSchema = createInsertSchema(tenantsTable)
   });
 
 export type CreateTenant = z.infer<typeof createTenantSchema>;
+
+export const createTenantFileSchema = createInsertSchema(tenantFilesTable).omit(
+  {
+    createdAt: true,
+    updatedAt: true,
+    deletedAt: true,
+    createdBy: true,
+    updatedBy: true,
+  },
+);
+
+export type CreateTenantFile = z.infer<typeof createTenantFileSchema>;
+
+export const createTenantFileForTenantSchema = createTenantFileSchema.omit({
+  tenantId: true,
+});

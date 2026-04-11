@@ -1,4 +1,3 @@
-import MainHeader from "@/components/molecules/main-header/main-header-ui";
 import MainWrapper from "@/components/molecules/main-wrapper/main-wrapper-ui";
 import { StyleSheet, View } from "react-native";
 
@@ -6,7 +5,6 @@ export default function Requests() {
   return (
     <MainWrapper
       title="Requests"
-      StickyHeader={<MainHeader />}
       data={[{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]}
       renderItem={({ index }) => (
         <View

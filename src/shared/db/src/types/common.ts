@@ -34,14 +34,17 @@ export type BaseResponseWithPaging = z.infer<
 
 export const imageTypes = ["image/jpeg", "image/png"] as const;
 
+export type ImageType = (typeof imageTypes)[number];
+
 export const imageUploadRequestSchema = z.object({
   name: z.string(),
-  uri: z.string(),
+  uri: z.string().min(1, "URI is required"),
   type: z.enum(imageTypes, "Invalid file type. Only JPEG and PNG are allowed."),
   size: z
     .number()
     .int()
-    .max(10 * 1024 * 1024), // Max 10MB
+    .gt(0, "File size must be greater than 0")
+    .max(10 * 1024 * 1024, "File size must be less than 10MB"), // Max 10MB
 });
 export type ImageUploadRequest = z.infer<typeof imageUploadRequestSchema>;
 
@@ -62,6 +65,8 @@ export const documentTypes = [
   "application/pdf",
   "application/msword",
 ] as const;
+
+export type DocumentType = (typeof documentTypes)[number];
 
 export const documentUploadRequestSchema = imageUploadRequestSchema.extend({
   type: z.enum(

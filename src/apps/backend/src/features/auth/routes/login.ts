@@ -21,6 +21,7 @@ export function loginRoute(fastify: FastifyInstance) {
     const authData = await processAuth({
       fastify,
       userId: result.user.id,
+      role: result.role,
       organizationId: result.organizationId,
       reply,
     });

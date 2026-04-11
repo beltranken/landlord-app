@@ -13,9 +13,8 @@ export default function CustomTabBar({
 }: Readonly<BottomTabBarProps>) {
   const focusedRoute = state.routes[state.index];
 
-  if (focusedRoute.name.includes("[id]") || focusedRoute.name.includes("add")) {
-    return null;
-  }
+  const isHidden =
+    focusedRoute.name.includes("[id]") || focusedRoute.name.includes("add");
 
   const filteredRoutes = useMemo(
     () =>
@@ -63,7 +62,7 @@ export default function CustomTabBar({
   };
 
   return (
-    <View style={styles.tabBarWrapper}>
+    <View style={[styles.tabBarWrapper, { opacity: isHidden ? 0 : 1 }]}>
       <View style={styles.tabBar} onLayout={handleTabBarLayout}>
         <Animated.View
           style={{
@@ -78,7 +77,7 @@ export default function CustomTabBar({
           }}
         />
 
-        {filteredRoutes.map((route, index) => {
+        {filteredRoutes.map((route) => {
           const isFocused = route.key === focusedRoute.key;
 
           let icon: Icon = "grid";

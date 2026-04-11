@@ -36,6 +36,7 @@ export function refreshRoute(fastify: FastifyInstance) {
         fastify,
         userId: result.user.id,
         organizationId,
+        role: result.role,
         reply,
       });
 

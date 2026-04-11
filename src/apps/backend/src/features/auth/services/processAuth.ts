@@ -1,12 +1,22 @@
+import { UserRole } from "@db/types";
 import { FastifyInstance, FastifyReply } from "fastify";
 import ms, { StringValue } from "ms";
 
-export async function processAccessAuth(
-  fastify: FastifyInstance,
-  reply: FastifyReply,
-  userId: number,
-  organizationId: number,
-) {
+type ProcessAuthInput = {
+  fastify: FastifyInstance;
+  userId: number;
+  role: UserRole;
+  organizationId: number;
+  reply: FastifyReply;
+};
+
+export async function processAccessAuth({
+  fastify,
+  reply,
+  userId,
+  role,
+  organizationId,
+}: ProcessAuthInput) {
   // TODO: add permissions/roles here
 
   const jwtAccessExpiryMs = ms(
@@ -24,12 +34,12 @@ export async function processAccessAuth(
     jwtAccessExpiry: jwtAccessExpiryMs,
   };
 }
-export async function processRefreshAuth(
-  fastify: FastifyInstance,
-  reply: FastifyReply,
-  userId: number,
-  organizationId: number,
-) {
+export async function processRefreshAuth({
+  fastify,
+  reply,
+  userId,
+  organizationId,
+}: Omit<ProcessAuthInput, "role">) {
   const jwtRefreshExpiryMs = ms(
     (fastify.config.JWT_REFRESH_EXPIRY ?? "7d") as StringValue,
   );
@@ -50,17 +60,13 @@ export async function processRefreshAuth(
 export async function processAuth({
   fastify,
   userId,
+  role,
   organizationId,
   reply,
-}: Readonly<{
-  fastify: FastifyInstance;
-  userId: number;
-  organizationId: number;
-  reply: FastifyReply;
-}>) {
+}: Readonly<ProcessAuthInput>) {
   return await Promise.all([
-    processAccessAuth(fastify, reply, userId, organizationId),
-    processRefreshAuth(fastify, reply, userId, organizationId),
+    processAccessAuth({ fastify, reply, userId, role, organizationId }),
+    processRefreshAuth({ fastify, reply, userId, organizationId }),
   ]).then(([accessAuth, refreshAuth]) => ({
     ...accessAuth,
     ...refreshAuth,
