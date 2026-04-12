@@ -37,7 +37,7 @@ export default function TenantPage() {
         <TextH2>Payment History</TextH2>
       </CardSection>
 
-      <TenantFileSection files={tenant.files} />
+      <TenantFileSection files={tenant.files} tenantId={tenant.id} />
     </InnerWrapper>
   );
 }

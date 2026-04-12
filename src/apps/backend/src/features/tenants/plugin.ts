@@ -4,7 +4,11 @@ import { errorResponses } from "@backend/utils/errors";
 import paginatedResponseWrapper from "@backend/utils/paginatedResponseWrapper";
 import paramSchema from "@backend/utils/paramSchema";
 import responseWrapper from "@backend/utils/responseWrapper";
-import { createTenantFileForTenantSchema, tenantSchema } from "@db/types";
+import {
+  createTenantFileForTenantSchema,
+  createTenantFileResponseSchema,
+  tenantSchema,
+} from "@db/types";
 import { pagingRequestSchema } from "@types";
 import { FastifyPluginAsync } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
@@ -74,7 +78,7 @@ export const tenantsPlugin: FastifyPluginAsync = async (fastify, _options) => {
         params: paramSchema("tenantId"),
         body: createTenantFileForTenantSchema,
         response: {
-          201: responseWrapper(createResponseWrapper("tenantFileId")),
+          201: createTenantFileResponseSchema,
           ...errorResponses,
         },
       },

@@ -2,6 +2,7 @@ import { createSelectSchema } from "drizzle-orm/zod";
 import { createInsertSchema } from "drizzle-zod";
 import z from "zod/v4";
 import { tenantFilesTable, tenantsTable } from "../schema/tenants";
+import { baseResponseSchema } from "./common";
 
 export type TenantFile = typeof tenantFilesTable.$inferSelect;
 export const tenantFileSchema = createSelectSchema(tenantFilesTable);
@@ -36,6 +37,7 @@ export type CreateTenant = z.infer<typeof createTenantSchema>;
 
 export const createTenantFileSchema = createInsertSchema(tenantFilesTable).omit(
   {
+    fileId: true,
     createdAt: true,
     updatedAt: true,
     deletedAt: true,
@@ -48,4 +50,16 @@ export type CreateTenantFile = z.infer<typeof createTenantFileSchema>;
 
 export const createTenantFileForTenantSchema = createTenantFileSchema.omit({
   tenantId: true,
+  url: true,
 });
+
+export const createTenantFileResponseSchema = baseResponseSchema.extend({
+  data: z.object({
+    tenantFileId: z.number(),
+    signUrl: z.string().optional().nullable(),
+  }),
+});
+
+export type CreateTenantFileResponse = z.infer<
+  typeof createTenantFileResponseSchema
+>;

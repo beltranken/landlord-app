@@ -15,6 +15,7 @@ import {
   propertyTypeEnum,
   rentFrequencyEnum,
 } from "./enums";
+import { filesTable } from "./files";
 import { organizationsTable, userAudit } from "./users";
 
 export const propertiesTable = pgTable(
@@ -53,6 +54,9 @@ export const propertyAttachmentsTable = pgTable("property_attachments", {
   propertyId: integer("property_id")
     .notNull()
     .references(() => propertiesTable.id, { onDelete: "cascade" }),
+  fileId: integer("file_id").references(() => filesTable.id, {
+    onDelete: "set null",
+  }),
   name: varchar("name", { length: 255 }).notNull(),
   url: varchar("url", { length: 255 }).notNull(),
   description: text("description"),
@@ -95,6 +99,9 @@ export const propertyImagesTable = pgTable("property_images", {
     () => propertyFeaturesTable.id,
     { onDelete: "cascade" },
   ),
+  fileId: integer("file_id").references(() => filesTable.id, {
+    onDelete: "set null",
+  }),
   url: varchar("url", { length: 255 }).notNull(),
   description: text("description"),
   ...timestamps,

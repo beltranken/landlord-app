@@ -1,6 +1,7 @@
 import { date, integer, pgTable, text, varchar } from "drizzle-orm/pg-core";
 
 import { address, timestamps } from "./common";
+import { filesTable } from "./files";
 import { organizationsTable, userAudit, usersTable } from "./users";
 
 export const tenantsTable = pgTable("tenants", {
@@ -27,7 +28,9 @@ export const tenantFilesTable = pgTable("tenant_files", {
   tenantId: integer("tenant_id")
     .notNull()
     .references(() => tenantsTable.id, { onDelete: "cascade" }),
-  image: varchar("image", { length: 255 }),
+  fileId: integer("file_id").references(() => filesTable.id, {
+    onDelete: "set null",
+  }),
   name: varchar("name", { length: 255 }).notNull(),
   url: varchar("url", { length: 255 }).notNull(),
   description: text("description"),

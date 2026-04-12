@@ -1,5 +1,6 @@
 export * from "./schema/common";
 export * from "./schema/enums";
+export * from "./schema/files";
 export * from "./schema/invoices";
 export * from "./schema/properties";
 export * from "./schema/rents";

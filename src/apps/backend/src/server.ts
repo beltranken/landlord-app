@@ -6,6 +6,7 @@ import env from "@fastify/env";
 import Fastify from "fastify";
 import {
   authPlugin,
+  filesPlugin,
   propertiesPlugin,
   rentsPlugin,
   tenantsPlugin,
@@ -153,6 +154,7 @@ export const createServer = async () => {
   await fastify.register(propertiesPlugin, { prefix: "/api/properties" });
   await fastify.register(tenantsPlugin, { prefix: "/api/tenants" });
   await fastify.register(rentsPlugin, { prefix: "/api/rents" });
+  await fastify.register(filesPlugin, { prefix: "/api/files" });
 
   await fastify.ready();
 

@@ -1,5 +1,5 @@
-import formatResult, { FormatResult } from "@backend/utils/formatResult";
-import { CreateTenantFile } from "@db/types";
+import formatResult from "@backend/utils/formatResult";
+import { CreateTenantFile, CreateTenantFileResponse } from "@db/types";
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { createTenantFile } from "../services";
 
@@ -8,7 +8,7 @@ type CreateTenantFileRoute = {
     tenantId: number;
   };
   Body: Omit<CreateTenantFile, "tenantId">;
-  Reply: FormatResult<{ tenantFileId: number }>;
+  Reply: CreateTenantFileResponse;
 };
 
 export function createTenantFileRoute(fastify: FastifyInstance) {

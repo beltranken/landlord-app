@@ -1,5 +1,6 @@
 export * from "./types/common";
 export * from "./types/enums";
+export * from "./types/files";
 export * from "./types/organization";
 export * from "./types/property";
 export * from "./types/property-feature";
