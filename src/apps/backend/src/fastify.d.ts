@@ -1,5 +1,6 @@
 import { S3Client } from "@aws-sdk/client-s3";
 import { Db } from "@db/initDb";
+import { UserRole } from "@db/types";
 import { FastifyJwtNamespace } from "@fastify/jwt";
 import "fastify";
 
@@ -49,10 +50,12 @@ declare module "@fastify/jwt" {
     payload: {
       userId: number;
       organizationId: number;
+      role: UserRole;
     };
     user: {
       userId: number;
       organizationId: number;
+      role: UserRole;
     };
   }
 

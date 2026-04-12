@@ -1,4 +1,4 @@
-import { authenticate } from "@backend/decorators";
+import { authenticate, requireAdminOrCollector } from "@backend/decorators";
 import { errorResponses } from "@backend/utils/errors";
 import paginatedRequestWrapper from "@backend/utils/paginatedRequestWrapper";
 import paginatedResponseWrapper from "@backend/utils/paginatedResponseWrapper";
@@ -14,6 +14,7 @@ export const rentsPlugin: FastifyPluginAsync = async (fastify, _options) => {
   const typedFastify = fastify.withTypeProvider<ZodTypeProvider>();
 
   fastify.addHook("preHandler", authenticate(fastify));
+  fastify.addHook("preHandler", requireAdminOrCollector());
 
   typedFastify.get(
     "/:rentId",
