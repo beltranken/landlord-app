@@ -42,9 +42,9 @@ export default function PrivateLayout() {
         }}
       />
       <Tabs.Screen
-        name="payments/index"
+        name="contracts/index"
         options={{
-          title: "Payments",
+          title: "Contracts",
           tabBarIcon: ({ focused }) => (
             <TabButton isFocused={focused} icon="cash" />
           ),
@@ -89,6 +89,21 @@ export default function PrivateLayout() {
         name="tenants/[id]/index"
         options={{
           title: "Tenant Details",
+          href: null,
+        }}
+      />
+
+      <Tabs.Screen
+        name="contracts/[id]/index"
+        options={{
+          title: "Contract Details",
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="contracts/(inner)/add"
+        options={{
+          title: "Contracts",
           href: null,
         }}
       />

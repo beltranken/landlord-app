@@ -6,7 +6,7 @@ export const checkPermission = (allowedRoles: UserRole[]) => {
   return async function (request: FastifyRequest) {
     if (!allowedRoles.includes(request.user.role)) {
       throw new Forbidden(
-        `Insufficient permissions. Required: ${allowedRoles.join(" or ")}`,
+        `Insufficient permissions. Required: ${allowedRoles.join(" or ")}: ${JSON.stringify(request.user)}`,
       );
     }
   };

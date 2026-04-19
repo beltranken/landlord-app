@@ -61,8 +61,8 @@ declare module "@fastify/jwt" {
 
   interface FastifyJWTNamespace {
     refresh: {
-      payload: { userId: number };
-      user: { userId: number };
+      payload: { userId: number; organizationId: number; role: UserRole };
+      user: { userId: number; organizationId: number; role: UserRole };
     };
   }
 }

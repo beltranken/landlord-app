@@ -5,6 +5,7 @@ import {
   organizationUsersTable,
   usersTable,
 } from "@db/schema";
+import { UserRole } from "@db/types";
 import { RegisterRequest, UserStatus } from "@types";
 import bcrypt from "bcrypt";
 import { FastifyInstance } from "fastify";
@@ -91,9 +92,14 @@ export async function register(
     await tx.insert(organizationUsersTable).values({
       organizationId,
       userId,
+      role: UserRole.ADMIN,
     });
 
-    const token = fastify.jwt.sign({ userId, organizationId });
+    const token = fastify.jwt.sign({
+      userId,
+      organizationId,
+      role: UserRole.ADMIN,
+    });
     fastify.log.debug(`token: ${token}`);
 
     await postMarkClient.sendEmail({

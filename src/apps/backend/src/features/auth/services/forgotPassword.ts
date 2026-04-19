@@ -1,9 +1,9 @@
-import { eq, isNull, and } from "@db/drizzle";
+import postMarkClient from "@backend/libs/postMark";
+import { and, eq, isNull } from "@db/drizzle";
 import { usersTable } from "@db/schema";
 import { ForgotPasswordRequest, UserStatus } from "@types";
 import { FastifyInstance } from "fastify";
 import { Conflict } from "http-errors";
-import postMarkClient from "@backend/libs/postMark";
 
 export async function forgotPassword(
   fastify: FastifyInstance,
@@ -19,12 +19,9 @@ export async function forgotPassword(
     throw new Conflict("User with this email does not exist");
   }
 
-  const token = fastify.jwt.sign(
-    { userId: user.id },
-    {
-      expiresIn: "1d",
-    },
-  );
+  const token = fastify.jwt.sign({ userId: user.id } as any, {
+    expiresIn: "1d",
+  });
   fastify.log.debug(`token: ${token}`);
 
   await postMarkClient.sendEmail({

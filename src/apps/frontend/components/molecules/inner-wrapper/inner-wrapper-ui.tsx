@@ -37,39 +37,48 @@ export default function InnerWrapper({
 
   return (
     <ScrollView style={{ width: "100%" }}>
-      <View style={styles.container}>
-        {title && <TextH1>{title}</TextH1>}
+      <View style={styles.wrapper}>
+        <View style={styles.container}>
+          {title && <TextH1>{title}</TextH1>}
 
-        {children}
+          {children}
 
-        {onSubmit ? (
-          <View style={styles.btnContainer}>
-            <Button onPress={onSubmit}>{submitButtonLabel}</Button>
+          {onSubmit ? (
+            <View style={styles.btnContainer}>
+              <Button onPress={onSubmit}>{submitButtonLabel}</Button>
 
-            <Button
-              style={styles.btnCancel}
-              textStyles={{ color: Colors.text }}
-              containerStyle={{ width: "auto" }}
-              onPress={handleOnBack}
-            >
-              {backButtonLabel}
-            </Button>
-          </View>
-        ) : (
-          <View></View>
-        )}
+              <Button
+                style={styles.btnCancel}
+                textStyles={{ color: Colors.text }}
+                containerStyle={{ width: "auto" }}
+                onPress={handleOnBack}
+              >
+                {backButtonLabel}
+              </Button>
+            </View>
+          ) : (
+            <View></View>
+          )}
 
-        <Loading visible={isLoading} />
+          <Loading visible={isLoading} />
+        </View>
       </View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  wrapper: {
+    paddingHorizontal: Sizes.padding,
+    width: "100%",
+    alignContent: "center",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   container: {
     width: "100%",
     gap: Sizes.padding * 3,
-    paddingHorizontal: Sizes.padding,
+    maxWidth: Sizes.maxWidth,
   },
   btnContainer: {
     gap: Sizes.padding,

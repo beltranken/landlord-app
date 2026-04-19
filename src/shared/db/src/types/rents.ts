@@ -1,4 +1,4 @@
-import { createSelectSchema } from "drizzle-orm/zod";
+import { createInsertSchema, createSelectSchema } from "drizzle-orm/zod";
 import z from "zod/v4";
 import { rentsTable, rentTenantsTable } from "../schema";
 import { Property, propertySchema } from "./property";
@@ -30,3 +30,46 @@ export const rentsFilterSchema = z.object({
 });
 
 export type RentsFilter = z.infer<typeof rentsFilterSchema>;
+
+export const createRentTenantSchema = createInsertSchema(rentTenantsTable).omit(
+  {
+    rentId: true,
+  },
+);
+
+export const createRentSchema = createInsertSchema(rentsTable)
+  .omit({
+    createdAt: true,
+    updatedAt: true,
+    deletedAt: true,
+    createdBy: true,
+    updatedBy: true,
+    status: true,
+  })
+  .extend({
+    tenants: createRentTenantSchema
+      .array()
+      .min(1, "At least one tenant is required"),
+  });
+
+export type CreateRent = z.infer<typeof createRentSchema>;
+
+export const createRentStep1Schema = createRentSchema.pick({
+  propertyId: true,
+});
+
+export type CreateRentStep1 = z.infer<typeof createRentStep1Schema>;
+
+export const createRentStep2Schema = z
+  .object({
+    rentId: z.number().int(),
+    tenants: createRentTenantSchema
+      .array()
+      .min(1, "At least one tenant is required"),
+  })
+  .refine((data) => data.tenants.filter((t) => t.isPrimary).length === 1, {
+    message: "Exactly one tenant must be marked as primary",
+    path: ["tenants"],
+  });
+
+export type CreateRentStep2 = z.infer<typeof createRentStep2Schema>;

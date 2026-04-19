@@ -20,14 +20,14 @@ export const rentsTable = pgTable("rents", {
   propertyId: integer("property_id")
     .notNull()
     .references(() => propertiesTable.id, { onDelete: "cascade" }),
-  startDate: date("start_date").notNull(),
-  endDate: date("end_date").notNull(),
+  startDate: date("start_date"),
+  endDate: date("end_date"),
   frequency: rentFrequencyEnum("frequency")
     .notNull()
     .default(RentFrequency.MONTHLY),
-  amount: integer("amount").notNull(),
-  gracePeriodDays: integer("grace_period_days").notNull(),
-  nextBillingDate: date("next_billing_date").notNull(),
+  amount: integer("amount"),
+  gracePeriodDays: integer("grace_period_days"),
+  nextBillingDate: date("next_billing_date"),
   status: rentStatusEnum("status").notNull().default(RentStatus.DRAFT),
   ...timestamps,
   ...userAudit,

@@ -1,12 +1,15 @@
 import { Button } from "@/components/atoms/button";
+import ListFooter from "@/components/atoms/list-footer/list-footer";
+import ListItemSeparator from "@/components/atoms/list-item-separator/list-item-separator";
 import { TextH1 } from "@/components/atoms/text";
 import Text from "@/components/atoms/text/text-ui";
 import { Colors } from "@/constants";
 import Sizes from "@/constants/sizes";
+import { listKeyExtractor } from "@/utils/list-key-extractor";
 import { Ionicons } from "@expo/vector-icons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { FlashList, FlashListProps, ListRenderItem } from "@shopify/flash-list";
-import { ActivityIndicator, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import ListCard from "../list-card/list-card";
 import SearchInput from "../search-input/search-input";
 
@@ -74,19 +77,7 @@ export default function MainWrapper<T extends { id: number }>({
   );
 
   const ListFooterComponent = (
-    <View style={styles.wrapper}>
-      <View style={styles.footerContainer}>
-        {hasMore && isFetching && (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator />
-          </View>
-        )}
-      </View>
-    </View>
-  );
-
-  const ItemSeparatorComponent = () => (
-    <View style={{ height: Sizes.padding }} />
+    <ListFooter hasMore={hasMore} isFetching={isFetching} />
   );
 
   const handleLoadMore = () => {
@@ -106,10 +97,8 @@ export default function MainWrapper<T extends { id: number }>({
         data={[{ type: "header", element: SearchComponent }, ...data]}
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.5}
-        ItemSeparatorComponent={ItemSeparatorComponent}
-        keyExtractor={(item, index) =>
-          "id" in item ? item["id"].toString() : `header-${index}`
-        }
+        ItemSeparatorComponent={ListItemSeparator}
+        keyExtractor={listKeyExtractor}
         renderItem={(param) => {
           if ("type" in param.item && param.item.type === "header") {
             return param.item.element;
@@ -186,17 +175,6 @@ const styles = StyleSheet.create({
     maxWidth: Sizes.maxWidth,
     paddingVertical: Sizes.padding,
     backgroundColor: Colors.neutral,
-  },
-  footerContainer: {
-    width: "100%",
-    alignItems: "center",
-    maxWidth: Sizes.maxWidth,
-    minHeight: 250,
-  },
-  loadingContainer: {
-    alignItems: "center",
-    width: "100%",
-    paddingVertical: Sizes.padding,
   },
   actionWrapper: {
     position: "absolute",

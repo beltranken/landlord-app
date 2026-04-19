@@ -91,7 +91,7 @@ export default function CustomTabBar({
             case "tenants/index":
               icon = "person";
               break;
-            case "payments/index":
+            case "contracts/index":
               icon = "cash";
               break;
             case "requests/index":
