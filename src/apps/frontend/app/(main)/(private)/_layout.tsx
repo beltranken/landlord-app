@@ -101,7 +101,28 @@ export default function PrivateLayout() {
         }}
       />
       <Tabs.Screen
-        name="contracts/(inner)/add"
+        name="contracts/(inner)/add/index"
+        options={{
+          title: "Contracts",
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="contracts/(inner)/add/step1"
+        options={{
+          title: "Contracts",
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="contracts/(inner)/add/step2"
+        options={{
+          title: "Contracts",
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="contracts/(inner)/add/step3"
         options={{
           title: "Contracts",
           href: null,

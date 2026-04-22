@@ -1,22 +1,28 @@
-import { Button } from "@/components/atoms/button";
+import { GetPropertyResponse } from "@/api/types.gen";
 import ListEmpty from "@/components/atoms/list-empty/list-empty";
 import ListFooter from "@/components/atoms/list-footer/list-footer";
 import ListItemSeparator from "@/components/atoms/list-item-separator/list-item-separator";
-import { Text } from "@/components/atoms/text";
 import ListCard from "@/components/molecules/list-card/list-card";
 import PropertyCard from "@/components/molecules/property-card/property-card-ui";
 import SearchInput from "@/components/molecules/search-input/search-input";
-import { BaseStyles, Colors, Sizes } from "@/constants";
+import ContractStepNextAction from "@/components/screens/contracts/contract-step-next-action";
+import { BaseStyles, Colors } from "@/constants";
 import useProperties from "@/hooks/queries/useProperties";
+import { useContractCreation } from "@/providers/step-form-provider";
 import { listKeyExtractor } from "@/utils/list-key-extractor";
-import { AntDesign } from "@expo/vector-icons";
 import { FlashList } from "@shopify/flash-list";
+import { useRouter } from "expo-router";
 import { useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
 
 export default function AddContractStep1Page() {
+  const router = useRouter();
+
+  const { setCurrentStep, setStep1Data } = useContractCreation();
+
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedId, setSelectedId] = useState<number>();
+  const [selectedProperty, setSelectedProperty] =
+    useState<GetPropertyResponse["data"]>();
 
   const { data, isPending, isFetching, hasNextPage } = useProperties();
 
@@ -27,21 +33,31 @@ export default function AddContractStep1Page() {
       return undefined;
     }
 
-    return [{ StickyComponent }, ..._data];
+    return [
+      {
+        StickyComponent: (
+          <View style={styles.background}>
+            <SearchInput
+              placeholder="Search property by name or tenant"
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+            />
+          </View>
+        ),
+      },
+      ..._data,
+    ];
   }, [data]);
 
-  const StickyComponent = (
-    <View style={styles.background}>
-      <SearchInput
-        placeholder="Search property by name or tenant"
-        value={searchQuery}
-        onChangeText={setSearchQuery}
-      />
-    </View>
-  );
+  const handleOnPress = (property: GetPropertyResponse["data"]) => {
+    setSelectedProperty(property);
+  };
 
-  const handleOnPress = (propertyId: number) => {
-    setSelectedId(propertyId);
+  const handleOnNext = () => {
+    console.log("Next step with selected property ID:", selectedProperty?.id);
+    setCurrentStep(2);
+    setStep1Data(selectedProperty!);
+    router.push("/contracts/add/step2");
   };
 
   if (isPending) {
@@ -73,12 +89,14 @@ export default function AddContractStep1Page() {
                   containerStyle={{
                     borderWidth: 2,
                     borderColor:
-                      item.id === selectedId ? Colors.primary : "transparent",
+                      item.id === selectedProperty?.id
+                        ? Colors.primary
+                        : "transparent",
                   }}
                 >
                   <PropertyCard
                     item={item}
-                    onPress={() => handleOnPress(item.id)}
+                    onPress={() => handleOnPress(item)}
                   />
                 </ListCard>
               )}
@@ -87,17 +105,10 @@ export default function AddContractStep1Page() {
         )}
       />
 
-      {selectedId && (
-        <View style={BaseStyles.wrapper}>
-          <View style={styles.actionContainer}>
-            <Button style={styles.nextBtn} containerStyle={{ width: "100%" }}>
-              <Text style={styles.nextBtnText}>Next Step</Text>
-
-              <AntDesign name="arrow-right" size={20} color="white" />
-            </Button>
-          </View>
-        </View>
-      )}
+      <ContractStepNextAction
+        disabled={!selectedProperty}
+        onPress={handleOnNext}
+      />
     </View>
   );
 }
@@ -109,23 +120,6 @@ const styles = StyleSheet.create({
   scrollContainer: {
     width: "100%",
     gap: 0,
-  },
-  actionContainer: {
-    backgroundColor: Colors.white,
-    padding: Sizes.padding,
-    width: "100%",
-  },
-  nextBtn: {
-    width: "100%",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 16,
-  },
-  nextBtnText: {
-    color: "white",
-    fontSize: 16,
-    fontFamily: "Inter-SemiBold",
   },
   wrapper: {
     flex: 1,

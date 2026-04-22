@@ -1,17 +1,21 @@
 import { BaseStyles, Colors, Sizes } from "@/constants";
+import { useMemo } from "react";
 import {
   Pressable,
   PressableProps,
+  StyleProp,
   StyleSheet,
   TextProps,
   View,
   ViewProps,
+  ViewStyle,
 } from "react-native";
 import Text from "../text/text-ui";
 
 type ButtonProps = PressableProps & {
   containerStyle?: ViewProps["style"];
   textStyles?: TextProps["style"];
+  disabledStyles?: StyleProp<ViewStyle>;
 };
 
 function Button({
@@ -19,6 +23,8 @@ function Button({
   textStyles,
   children,
   style,
+  disabledStyles = {},
+  disabled,
   ...props
 }: Readonly<ButtonProps>) {
   const typeOfChild = typeof children;
@@ -38,10 +44,23 @@ function Button({
       content = children;
   }
 
-  const pressableStyle: PressableProps["style"] =
-    typeof style === "function"
-      ? (state) => [styles.buttonContainer, style(state)]
-      : [styles.buttonContainer, style];
+  const pressableStyle: PressableProps["style"] = useMemo(() => {
+    if (typeof style === "function") {
+      return (state) => [
+        styles.buttonContainer,
+        style(state),
+        disabled && styles.disabled,
+        disabled && disabledStyles,
+      ];
+    }
+
+    return [
+      styles.buttonContainer,
+      style,
+      disabled && styles.disabled,
+      disabled && disabledStyles,
+    ];
+  }, [style, disabled, disabledStyles]);
 
   return (
     <View style={[styles.container, containerStyle]}>
@@ -66,6 +85,9 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: "Inter-Bold",
     color: Colors.buttonText,
+  },
+  disabled: {
+    backgroundColor: Colors.buttonDisabled,
   },
 });
 

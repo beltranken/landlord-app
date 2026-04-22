@@ -1,13 +1,16 @@
 import ProgressNavigation from "@/components/organisms/progress-navigation/progress-navigation";
-import { StepFormProvider, useStepForm } from "@/providers/step-form-provider";
+import {
+  ContractCreationProvider,
+  useContractCreation,
+} from "@/providers/step-form-provider";
 import { Slot } from "expo-router";
 
 function AddContractContent() {
-  const { currentStep, totalSteps } = useStepForm();
+  const { currentStep, totalSteps } = useContractCreation();
 
   return (
     <ProgressNavigation
-      titles={["Select Property"]}
+      titles={["Select Property", "Select Tenants", "Set Terms"]}
       currrentStep={currentStep}
       totalSteps={totalSteps}
       isLoading={false}
@@ -19,8 +22,8 @@ function AddContractContent() {
 
 export default function AddContractLayout() {
   return (
-    <StepFormProvider initialStep={1} initialTotalSteps={3}>
+    <ContractCreationProvider initialStep={1} initialTotalSteps={3}>
       <AddContractContent />
-    </StepFormProvider>
+    </ContractCreationProvider>
   );
 }

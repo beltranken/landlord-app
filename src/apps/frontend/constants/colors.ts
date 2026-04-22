@@ -26,6 +26,8 @@ export const Colors = {
   text: "#414848",
   textError: "#BA1A1A",
 
+  buttonDisabled: "#F2F4F5",
+
   button: palette.primary,
   buttonText: white,
 

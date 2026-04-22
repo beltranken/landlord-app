@@ -73,3 +73,10 @@ export const createRentStep2Schema = z
   });
 
 export type CreateRentStep2 = z.infer<typeof createRentStep2Schema>;
+
+export const createRentStepSchema = z.object({
+  step1: createRentStep1Schema,
+  step2: createRentStep2Schema,
+});
+
+export type CreateRentStep = z.infer<typeof createRentStepSchema>;

@@ -23,7 +23,7 @@ export interface TextInputAmountMaskOptions {
 
 export type TextInputAmountProps = Omit<
   RNTextInputProps,
-  "value" | "onChangeText" | "keyboardType"
+  "value" | "onChange" | "onChangeText" | "keyboardType"
 > & {
   label?: string;
   labelStyle?: TextProps["style"];
