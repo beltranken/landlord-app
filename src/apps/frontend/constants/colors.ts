@@ -26,6 +26,8 @@ export const Colors = {
   text: "#414848",
   textError: "#BA1A1A",
 
+  buttonDisabled: "#F2F4F5",
+
   button: palette.primary,
   buttonText: white,
 
@@ -37,4 +39,7 @@ export const Colors = {
   inputBorder: "#D0D3D4",
 
   accentGradient: ["#FF0080", "#7928CA"],
+
+  danger: "#BA1A1A",
+  success: "#4CAF50",
 } as const;

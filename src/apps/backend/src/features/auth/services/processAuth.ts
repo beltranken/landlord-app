@@ -23,7 +23,7 @@ export async function processAccessAuth({
     (fastify.config.JWT_ACCESS_EXPIRY ?? "1h") as StringValue,
   );
   const token = await reply.jwtSign(
-    { userId, organizationId },
+    { userId, organizationId, role },
     {
       expiresIn: jwtAccessExpiryMs / 1000,
     },
@@ -38,14 +38,15 @@ export async function processRefreshAuth({
   fastify,
   reply,
   userId,
+  role,
   organizationId,
-}: Omit<ProcessAuthInput, "role">) {
+}: ProcessAuthInput) {
   const jwtRefreshExpiryMs = ms(
     (fastify.config.JWT_REFRESH_EXPIRY ?? "7d") as StringValue,
   );
 
   const refreshToken = await reply.refreshJwtSign(
-    { userId, organizationId },
+    { userId, organizationId, role },
     {
       expiresIn: jwtRefreshExpiryMs / 1000,
     },
@@ -66,7 +67,7 @@ export async function processAuth({
 }: Readonly<ProcessAuthInput>) {
   return await Promise.all([
     processAccessAuth({ fastify, reply, userId, role, organizationId }),
-    processRefreshAuth({ fastify, reply, userId, organizationId }),
+    processRefreshAuth({ fastify, reply, userId, role, organizationId }),
   ]).then(([accessAuth, refreshAuth]) => ({
     ...accessAuth,
     ...refreshAuth,

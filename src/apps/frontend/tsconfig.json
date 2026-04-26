@@ -24,6 +24,9 @@
     "../../shared/types/src/**/*.ts",
     "../../shared/db/src/types.ts",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts"
+    "expo-env.d.ts",
+    "../../../infra/date-input.bak2.tsx",
+    "../../../infra/date-input.bak.tsx",
+    "../../../infra/date-input-type.tsx"
   ]
 }

@@ -1,8 +1,8 @@
+import { GetPropertyResponse } from "@/api/types.gen";
 import { TextH2 } from "@/components/atoms/text";
 import ImageView from "@/components/molecules/image-view/image-view";
 import PropertyStatusUI from "@/components/molecules/property-status/property-status-ui";
 import { Sizes } from "@/constants";
-import { Property } from "@/types";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { Pressable, StyleSheet, View } from "react-native";
@@ -11,19 +11,26 @@ import PropertyFeatures from "./property-features-ui";
 import PropertyPrice from "./property-price-ui";
 
 export interface PropertyCardProps {
-  item: Property;
+  item: GetPropertyResponse["data"];
+  onPress?: () => void;
 }
 
-export default function PropertyCard({ item }: Readonly<PropertyCardProps>) {
+export default function PropertyCard({
+  item,
+  onPress,
+}: Readonly<PropertyCardProps>) {
   const router = useRouter();
 
+  const handleOnPress = () => {
+    if (onPress) {
+      onPress();
+    } else {
+      router.push(`/properties/${item.id}`);
+    }
+  };
+
   return (
-    <Pressable
-      style={styles.card}
-      onPress={() => {
-        router.push(`/properties/${item.id}`);
-      }}
-    >
+    <Pressable style={styles.card} onPress={handleOnPress}>
       <View style={styles.cardContent}>
         <View style={styles.imageWrapper}>
           <ImageView

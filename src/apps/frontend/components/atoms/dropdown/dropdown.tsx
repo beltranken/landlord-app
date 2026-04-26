@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import {
   Modal,
   Pressable,
+  ScrollView,
   StyleSheet,
   TextStyle,
   View,
@@ -119,27 +120,32 @@ export default function Dropdown<TItem extends BaseItem>({
       >
         <View style={dropdownStyles.overlay}>
           <View style={dropdownStyles.modalContent}>
-            {items.map((item) => {
-              const label = getLabel(item) ?? String(item.id);
-              const isSelected = item.id === selectedId;
+            <ScrollView
+              style={dropdownStyles.itemsScrollArea}
+              contentContainerStyle={dropdownStyles.itemsContentContainer}
+            >
+              {items.map((item) => {
+                const label = getLabel(item) ?? String(item.id);
+                const isSelected = item.id === selectedId;
 
-              return (
-                <Pressable
-                  key={item.id}
-                  style={dropdownStyles.item}
-                  onPress={() => handleSelect(item)}
-                >
-                  <Text
-                    style={[
-                      dropdownStyles.itemText,
-                      isSelected && dropdownStyles.itemTextSelected,
-                    ]}
+                return (
+                  <Pressable
+                    key={item.id}
+                    style={dropdownStyles.item}
+                    onPress={() => handleSelect(item)}
                   >
-                    {label}
-                  </Text>
-                </Pressable>
-              );
-            })}
+                    <Text
+                      style={[
+                        dropdownStyles.itemText,
+                        isSelected && dropdownStyles.itemTextSelected,
+                      ]}
+                    >
+                      {label}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </ScrollView>
 
             <Pressable style={dropdownStyles.closeButton} onPress={closeModal}>
               <Text style={dropdownStyles.closeButtonText}>Cancel</Text>
@@ -200,12 +206,20 @@ const dropdownStyles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.4)",
     justifyContent: "center",
     alignItems: "center",
+    paddingVertical: Sizes.padding * 2,
   },
   modalContent: {
     width: "80%",
+    maxHeight: "100%",
     borderRadius: 12,
     padding: 16,
     backgroundColor: "#FFFFFF",
+  },
+  itemsScrollArea: {
+    flexGrow: 0,
+  },
+  itemsContentContainer: {
+    paddingBottom: 8,
   },
   closeButton: {
     marginTop: 12,

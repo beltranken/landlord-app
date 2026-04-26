@@ -1,4 +1,4 @@
-import { handleJwtVerifyError } from "@backend/features";
+import { handleJwtVerifyError } from "@backend/features/auth";
 import fastifyJwt from "@fastify/jwt";
 import { FastifyPluginAsync, FastifyRequest } from "fastify";
 import fp from "fastify-plugin";

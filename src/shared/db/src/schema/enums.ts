@@ -1,6 +1,7 @@
 import { pgEnum } from "drizzle-orm/pg-core";
 
 import {
+  ChargeFrequency,
   InvoiceReason,
   PaymentMode,
   PaymentStatus,
@@ -26,6 +27,11 @@ export const userRoleEnum = pgEnum("user_role", enumToPgEnum(UserRole));
 export const rentFrequencyEnum = pgEnum(
   "rent_frequency",
   enumToPgEnum(RentFrequency),
+);
+
+export const chargeFrequencyEnum = pgEnum(
+  "charge_frequency",
+  enumToPgEnum(ChargeFrequency),
 );
 
 export const propertyTypeEnum = pgEnum(

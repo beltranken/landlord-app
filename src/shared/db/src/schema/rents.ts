@@ -1,16 +1,20 @@
 import {
   boolean,
-  date,
   integer,
   pgTable,
   text,
+  timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
 
-import { RentFrequency, RentStatus } from "../types/enums";
+import { ChargeFrequency, RentFrequency, RentStatus } from "../types/enums";
 
 import { timestamps } from "./common";
-import { rentFrequencyEnum, rentStatusEnum } from "./enums";
+import {
+  chargeFrequencyEnum,
+  rentFrequencyEnum,
+  rentStatusEnum,
+} from "./enums";
 import { propertiesTable } from "./properties";
 import { tenantsTable } from "./tenants";
 import { userAudit } from "./users";
@@ -20,14 +24,16 @@ export const rentsTable = pgTable("rents", {
   propertyId: integer("property_id")
     .notNull()
     .references(() => propertiesTable.id, { onDelete: "cascade" }),
-  startDate: date("start_date").notNull(),
-  endDate: date("end_date").notNull(),
+  startDate: timestamp("start_date"),
+  endDate: timestamp("end_date"),
   frequency: rentFrequencyEnum("frequency")
     .notNull()
     .default(RentFrequency.MONTHLY),
-  amount: integer("amount").notNull(),
-  gracePeriodDays: integer("grace_period_days").notNull(),
-  nextBillingDate: date("next_billing_date").notNull(),
+  amount: integer("amount"),
+  gracePeriodDays: integer("grace_period_days"),
+  firstBillingDate: timestamp("billing_start_date").defaultNow(),
+  billingCycleAnchor: integer("billing_cycle_anchor").default(1),
+  autoRenew: boolean("auto_renew").notNull().default(false),
   status: rentStatusEnum("status").notNull().default(RentStatus.DRAFT),
   ...timestamps,
   ...userAudit,
@@ -50,7 +56,10 @@ export const rentChargesTable = pgTable("rent_charges", {
   rentId: integer("rent_id")
     .notNull()
     .references(() => rentsTable.id, { onDelete: "cascade" }),
-  isRecurring: boolean("is_recurring").notNull().default(false),
+  frequency: chargeFrequencyEnum("frequency")
+    .notNull()
+    .default(ChargeFrequency.ONE_TIME),
+  billingCycleAnchor: integer("billing_cycle_anchor").default(1),
   amount: integer("amount").notNull(),
   description: text("description"),
   ...timestamps,

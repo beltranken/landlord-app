@@ -62,7 +62,10 @@ export default function CustomTabBar({
   };
 
   return (
-    <View style={[styles.tabBarWrapper, { opacity: isHidden ? 0 : 1 }]}>
+    <View
+      pointerEvents={isHidden ? "none" : "auto"}
+      style={[styles.tabBarWrapper, { opacity: isHidden ? 0 : 1 }]}
+    >
       <View style={styles.tabBar} onLayout={handleTabBarLayout}>
         <Animated.View
           style={{
@@ -91,7 +94,7 @@ export default function CustomTabBar({
             case "tenants/index":
               icon = "person";
               break;
-            case "payments/index":
+            case "contracts/index":
               icon = "cash";
               break;
             case "requests/index":

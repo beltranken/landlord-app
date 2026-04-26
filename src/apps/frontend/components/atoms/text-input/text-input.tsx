@@ -20,6 +20,7 @@ export type TextInputProps = RNTextInputProps & {
   wrapperStyle?: ViewProps["style"];
   containerStyle?: ViewProps["style"];
   leftIconName?: React.ComponentProps<typeof EvilIcons>["name"];
+  rightIcon?: React.ReactNode | React.ComponentProps<typeof EvilIcons>["name"];
   errorText?: string;
 };
 
@@ -29,6 +30,7 @@ export const TextInput = forwardRef<RNTextInput, Readonly<TextInputProps>>(
       label,
       placeholder,
       leftIconName,
+      rightIcon,
       errorText,
       style,
       onFocus,
@@ -62,7 +64,7 @@ export const TextInput = forwardRef<RNTextInput, Readonly<TextInputProps>>(
           </Text>
         )}
 
-        <View style={[styles.container, containerStyle]}>
+        <View style={[styles.container, containerStyle, BaseStyles.shadow]}>
           {leftIconName && (
             <EvilIcons
               name={leftIconName}
@@ -79,7 +81,7 @@ export const TextInput = forwardRef<RNTextInput, Readonly<TextInputProps>>(
             style={[
               styles.input,
               leftIconName && styles.inputWithIcon,
-              BaseStyles.shadow,
+
               style,
               errorText && styles.inputError,
             ]}
@@ -88,20 +90,35 @@ export const TextInput = forwardRef<RNTextInput, Readonly<TextInputProps>>(
             onFocus={handleFocus}
             onBlur={handleBlur}
           />
-          {errorText ? <Text style={styles.errorText}>{errorText}</Text> : null}
+
+          {typeof rightIcon === "string" ? (
+            <EvilIcons
+              name={rightIcon as React.ComponentProps<typeof EvilIcons>["name"]}
+              size={20}
+              color="#000"
+              style={styles.rightIcon}
+            />
+          ) : (
+            rightIcon
+          )}
         </View>
+
+        {errorText ? <Text style={styles.errorText}>{errorText}</Text> : null}
       </View>
     );
   },
 );
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   wrapper: {
     gap: Sizes.padding / 2,
   },
   container: {
     position: "relative",
     justifyContent: "center",
+    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: Colors.inputBorder,
   },
   label: {
     fontFamily: "Inter-Medium",
@@ -110,8 +127,6 @@ const styles = StyleSheet.create({
   },
   input: {
     backgroundColor: Colors.inputBackground,
-    borderWidth: 2,
-    borderColor: Colors.inputBorder,
     borderRadius: 8,
     outlineWidth: 2,
     outlineColor: "black",
@@ -134,5 +149,11 @@ const styles = StyleSheet.create({
     marginTop: 4,
     fontSize: 12,
     color: Colors.textError,
+  },
+  rightIcon: {
+    position: "absolute",
+    right: 10,
+    zIndex: 1,
+    opacity: 0.9,
   },
 });

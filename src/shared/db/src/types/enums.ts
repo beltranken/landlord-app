@@ -36,6 +36,14 @@ export enum RentFrequency {
   YEARLY = "yearly",
 }
 
+export enum ChargeFrequency {
+  ONE_TIME = "one_time",
+  WEEKLY = "weekly",
+  BIWEEKLY = "biweekly",
+  MONTHLY = "monthly",
+  YEARLY = "yearly",
+}
+
 export enum PropertyType {
   COMPLEX = "complex",
   CONDO = "condo",

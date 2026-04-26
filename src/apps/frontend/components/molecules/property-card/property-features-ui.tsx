@@ -1,10 +1,10 @@
+import { GetPropertyResponse } from "@/api/types.gen";
 import { Text } from "@/components/atoms/text";
 import { Sizes } from "@/constants";
-import { PropertyFeature } from "@/types";
 import { StyleSheet, View } from "react-native";
 
 export interface PropertyFeaturesProps {
-  features: PropertyFeature[];
+  features: GetPropertyResponse["data"]["features"];
 }
 
 export default function PropertyFeatures({

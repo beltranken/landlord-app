@@ -13,7 +13,8 @@ export default function CustomTabLayout({
 }: Readonly<PropsWithChildren<{ title: string; name: string }>>) {
   const router = useRouter();
 
-  const isInner = name.includes("[id]") || name.includes("add");
+  const isInner =
+    name.includes("[id]") || name.includes("add") || name.includes("(inner)");
 
   const handleBackPress = () => {
     if (router.canGoBack()) {
